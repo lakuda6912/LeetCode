@@ -1,0 +1,113 @@
+/**
+ * Note: The returned array must be malloced, assume caller calls free().
+ */
+int* searchRange(int* nums, int numsSize, int target, int* returnSize){
+
+int LeftIndex;
+int RightIndex;
+int MiddleIndex;
+int FirstTargetIndex = -1;
+int LastTargetIndex = -1;
+
+int *ReturnIndex = malloc(sizeof(int) * 2);
+ReturnIndex[0] = -1;
+ReturnIndex[1] = -1;
+*returnSize = 2;
+
+//Zero element
+if (numsSize == 0)
+{
+ return ReturnIndex;
+}
+//One element
+else if (numsSize == 1)
+{
+ if (nums[0] == target)
+ {
+  ReturnIndex[0] = 0;
+  ReturnIndex[1] = 0;
+ } 
+ return ReturnIndex;
+}
+//Two elements
+else if (numsSize == 2)
+{
+ if (nums[0] == target)
+ {
+   ReturnIndex[0] = 0;
+   if (nums[1] == target)
+    ReturnIndex[1] = 1;
+   else
+    ReturnIndex[1] = 0;
+ }  
+ else if (nums[1] == target)
+ {
+   ReturnIndex[0] = 1;
+   ReturnIndex[1] = 1;
+ }
+ return ReturnIndex;
+}
+
+//Find the first target
+LeftIndex = 0;
+RightIndex = numsSize - 1;
+MiddleIndex = (numsSize - 1)/2;
+while (LeftIndex != RightIndex)
+{
+  if ((RightIndex-LeftIndex) == 1)
+  {
+    if (nums[LeftIndex] == target)
+    {
+      FirstTargetIndex = LeftIndex;
+      break;
+    }
+    else if (nums[RightIndex] == target)
+    {
+      FirstTargetIndex = RightIndex;
+      break;
+    }
+    else
+      break;
+  }//if ((RightIndex-LeftIndex) == 1)
+  if (nums[MiddleIndex] < target)
+   LeftIndex = MiddleIndex;
+  else if (nums[MiddleIndex] >= target)
+   RightIndex = MiddleIndex;
+ MiddleIndex = (LeftIndex + RightIndex) / 2;  
+}//while (LeftIndex != RightIndex)
+//ReturnIndex[0] = LeftIndex;
+//ReturnIndex[1] = RightIndex;
+//return ReturnIndex;
+
+//Find the last target
+LeftIndex = 0;
+RightIndex = numsSize - 1;
+MiddleIndex = (numsSize - 1)/2;
+while (LeftIndex != RightIndex)
+{
+  if ((RightIndex-LeftIndex) == 1)
+  {
+    if (nums[RightIndex] == target)
+    {
+      LastTargetIndex = RightIndex;
+      break;
+    }
+    else if (nums[LeftIndex] == target)
+    {
+      LastTargetIndex = LeftIndex;
+      break;
+    }
+    else
+      break;
+  }//if ((RightIndex-LeftIndex) == 1)
+  if (nums[MiddleIndex] <= target)
+   LeftIndex = MiddleIndex;
+  else if (nums[MiddleIndex] > target)
+   RightIndex = MiddleIndex;
+ MiddleIndex = (LeftIndex + RightIndex) / 2;  
+}//while (LeftIndex != RightIndex)
+
+ReturnIndex[0] = FirstTargetIndex;
+ReturnIndex[1] = LastTargetIndex;
+return ReturnIndex;
+}
