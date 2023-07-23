@@ -1,0 +1,105 @@
+33. Search in Rotated Sorted Array
+Medium
+22.4K
+1.3K
+Companies
+There is an integer array nums sorted in ascending order (with distinct values).
+
+Prior to being passed to your function, nums is possibly rotated at an unknown pivot index k (1 <= k < nums.length) such that the resulting array is [nums[k], nums[k+1], ..., nums[n-1], nums[0], nums[1], ..., nums[k-1]] (0-indexed). For example, [0,1,2,4,5,6,7] might be rotated at pivot index 3 and become [4,5,6,7,0,1,2].
+
+Given the array nums after the possible rotation and an integer target, return the index of target if it is in nums, or -1 if it is not in nums.
+
+You must write an algorithm with O(log n) runtime complexity.
+
+int search(int* nums, int numsSize, int target){
+
+int LeftIndex = 0;
+int RightIndex = numsSize - 1;
+int MiddleIndex = (numsSize - 1) / 2;
+int PivotIndex = -1;
+int ReturnIndex = -1;
+
+//Find pivot with one element
+if (numsSize == 1)
+{
+  if (nums[0] == target)
+   return 0;
+  else
+   return -1; 
+}
+
+//Find pivot with more than one elements
+while (LeftIndex != RightIndex)
+{
+ if ((RightIndex - LeftIndex) == 1)
+ {
+   PivotIndex = (nums[RightIndex] > nums[LeftIndex])?(LeftIndex):(RightIndex);
+   break;
+ }
+
+ if ( (nums[MiddleIndex] > nums[LeftIndex]) && 
+      (nums[MiddleIndex] > nums[RightIndex]) )
+  LeftIndex = MiddleIndex;
+ else if ( (nums[MiddleIndex] < nums[LeftIndex]) && 
+           (nums[MiddleIndex] < nums[RightIndex]) )
+  RightIndex = MiddleIndex;
+ else
+ {
+  PivotIndex = LeftIndex; 
+  break;
+ }
+ MiddleIndex = (LeftIndex + RightIndex) >> 1;
+}//while (LeftIndex != RightIndex)
+//return PivotIndex;
+
+LeftIndex = PivotIndex;
+RightIndex = ((numsSize - 1) + PivotIndex) % numsSize;
+MiddleIndex = ((numsSize - 1) / 2 + PivotIndex) % numsSize;
+
+//Locate target
+while (LeftIndex != RightIndex)
+//for (int j=0; j<2; j++)
+{
+ int temp = RightIndex-LeftIndex;
+     temp = (temp < 0)?(temp+numsSize):(temp); 
+ if (temp == 1)
+ {
+   if (nums[LeftIndex] == target)
+   {
+    ReturnIndex = LeftIndex;
+    break;
+   }
+   else if (nums[RightIndex] == target)
+   {
+    ReturnIndex = RightIndex;
+    break;
+   }
+   else
+   {
+     ReturnIndex = -1;
+     break;
+   }
+ }//if (temp == 1)
+ if (nums[MiddleIndex] > target)
+  RightIndex = MiddleIndex;
+ else if (nums[MiddleIndex] < target)
+  LeftIndex = MiddleIndex;
+ else 
+ {
+   ReturnIndex = MiddleIndex;
+   break;
+ }
+ temp = RightIndex-LeftIndex;
+ temp = (temp < 0)?(temp+numsSize):(temp);
+ temp >>= 1;
+ temp += LeftIndex;
+ temp = (temp >= numsSize)?(temp-numsSize):(temp);
+ MiddleIndex = temp;
+
+}//while (LeftIndex != RightIndex)
+//return LeftIndex;
+//return MiddleIndex;
+//return RightIndex;
+return ReturnIndex;
+
+}
