@@ -1,0 +1,93 @@
+bool searchMatrix(int** matrix, int matrixSize, int* matrixColSize, int target){
+
+//Deal with only one item
+if ((matrixSize == 1) && 
+    (*matrixColSize == 1))
+{
+  if (matrix[0][0] == target)
+   return true;
+  else
+   return false; 
+}//if
+//Check if it is only one row
+int TargetRowIndex = -1;
+if (matrixSize == 1)
+{
+  TargetRowIndex = 0;
+  goto Label;
+}//if
+
+//Find the row where target may reside
+int LeftIndex = 0;
+int RightIndex = matrixSize - 1;
+int MiddleIndex = (matrixSize - 1)/2;
+bool ReturnFlag = false;
+while(LeftIndex != RightIndex)
+{
+ if ((RightIndex - LeftIndex) == 1)
+ {
+   if (target < matrix[LeftIndex][0])
+   {
+    return ReturnFlag;
+   }
+   else if ((target >= matrix[LeftIndex][0]) && 
+            (target <= matrix[LeftIndex][* matrixColSize-1]))
+   {
+    TargetRowIndex = LeftIndex;
+    break;
+   }
+   else if ((target >= matrix[RightIndex][0]) && 
+            (target <= matrix[RightIndex][* matrixColSize-1]))
+   {
+     TargetRowIndex = RightIndex;
+     break;
+   }
+   else
+   {
+     return false;
+   }  
+ }//if ((RightIndex - LeftIndex) == 1)
+ if (target <= matrix[MiddleIndex][0])
+  RightIndex = MiddleIndex;
+ else 
+  LeftIndex = MiddleIndex;
+ MiddleIndex = (LeftIndex + RightIndex) / 2; 
+}//while(LeftIndex != RightIndex)
+//return (TargetRowIndex == 0);
+
+Label:
+//Check if target is in the likely resided row
+LeftIndex = 0;
+RightIndex = *matrixColSize - 1;
+MiddleIndex = (*matrixColSize - 1)/2;
+if (LeftIndex == RightIndex)
+{
+  if (matrix[TargetRowIndex][0] == target)
+   return true;
+  else
+   return false; 
+}//if
+while(LeftIndex != RightIndex)
+{
+  if ((RightIndex - LeftIndex) == 1)
+  {
+    if ((matrix[TargetRowIndex][LeftIndex] == target) || 
+        (matrix[TargetRowIndex][RightIndex] == target))
+    {
+      ReturnFlag = true;
+    }
+    break;
+  }//if ((RightIndex - LeftIndex) == 1)
+
+  if (target <= matrix[TargetRowIndex][MiddleIndex])
+   RightIndex = MiddleIndex;
+  else 
+   LeftIndex = MiddleIndex;
+  MiddleIndex = (LeftIndex + RightIndex) / 2;
+}//while(LeftIndex != RightIndex)
+
+//return (TargetRowIndex == 1);
+//return (*matrixColSize == 4);
+//return (LeftIndex == 1);
+return ReturnFlag;
+}
