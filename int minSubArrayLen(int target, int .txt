@@ -1,0 +1,34 @@
+int minSubArrayLen(int target, int* nums, int numsSize){
+
+int LeftIndex = 0;
+int RightIndex = 0;
+int ReturnValue = 100000;
+int Sum = nums[0];
+
+while (RightIndex >= LeftIndex)
+{
+    if (Sum < target)
+    {
+     if (RightIndex == numsSize-1)
+     {
+      if (LeftIndex == 0)
+       ReturnValue = 0;   
+      break;
+     }//if (RightIndex == numsSize-1)
+
+     RightIndex++;   
+     RightIndex = (RightIndex == numsSize)?(numsSize - 1):(RightIndex);
+     Sum += nums[RightIndex];
+    }
+    else
+    {
+     if (ReturnValue > (RightIndex - LeftIndex + 1))
+      ReturnValue = RightIndex - LeftIndex + 1;
+
+     Sum -= nums[LeftIndex]; 
+     LeftIndex++;
+    }
+}//while (LeftIndex <= RightIndex)
+
+return ReturnValue;
+}
