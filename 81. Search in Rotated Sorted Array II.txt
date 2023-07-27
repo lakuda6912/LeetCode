@@ -1,0 +1,96 @@
+bool SubSum(int* nums, int LeftIndex, int RightIndex)
+{
+ for (int i=LeftIndex; i<=RightIndex; i++)
+ {
+  if (nums[i] != nums[LeftIndex])
+   return false;
+ }//for
+ return true;
+}
+
+bool search(int* nums, int numsSize, int target){
+
+int LeftIndex = 0;
+int RightIndex = numsSize - 1;
+int MiddleIndex = (numsSize - 1) / 2;
+int PivotIndex = 0;
+bool ReturnFlag = false;
+bool Temp1, Temp2;
+
+if (numsSize == 1)
+{
+    if (target == nums[0])
+     return true;
+    else
+     return false; 
+}//if (numsSize == 1)
+
+//Search the PivotIndex
+while (LeftIndex != RightIndex)
+//for (int i=0; i<1; i++)
+{
+  if ((RightIndex - LeftIndex) == 1)
+  {
+    if (nums[RightIndex] > nums[LeftIndex])
+     PivotIndex = LeftIndex;
+    else if (nums[RightIndex] < nums[LeftIndex])
+     PivotIndex = RightIndex;
+    else 
+     PivotIndex = LeftIndex;  
+     break;
+  }//if
+
+  if ((nums[MiddleIndex] > nums[LeftIndex]) && (nums[MiddleIndex] > nums[RightIndex]))
+   LeftIndex = MiddleIndex;
+  else if ((nums[MiddleIndex] < nums[LeftIndex]) && (nums[MiddleIndex] < nums[RightIndex]))
+   RightIndex = MiddleIndex;
+  else if ((nums[MiddleIndex] >= nums[LeftIndex]) && (nums[MiddleIndex] < nums[RightIndex]))
+  {
+    PivotIndex = LeftIndex;
+    break;
+  }
+  else
+  {
+    Temp1 = SubSum(nums, LeftIndex, MiddleIndex);
+    Temp2 = SubSum(nums, MiddleIndex, RightIndex);
+    if (Temp1 == true)
+     LeftIndex = MiddleIndex;
+    else if (Temp2 == true)
+     RightIndex = MiddleIndex; 
+  }//else
+
+  MiddleIndex = (LeftIndex + RightIndex) / 2;  
+}//while (LeftIndex != RightIndex)
+//return (PivotIndex == 1);
+//return (MiddleIndex == 1);
+//return (LeftIndex == 0);
+//return (RightIndex == 10);
+
+//Search the target
+LeftIndex = 0 + PivotIndex;
+RightIndex = ((numsSize - 1) + PivotIndex);
+MiddleIndex = ((numsSize - 1)/2 + PivotIndex);
+
+while (LeftIndex != RightIndex)
+{
+ if ((RightIndex - LeftIndex) == 1)
+ {
+  if (nums[LeftIndex % numsSize] == target)
+    return true;
+  else if (nums[RightIndex % numsSize] == target)
+    return true;
+  else
+    return false;
+ }//if
+
+ if (nums[MiddleIndex % numsSize] > target)
+   RightIndex = MiddleIndex;
+ else if (nums[MiddleIndex % numsSize] < target)
+   LeftIndex = MiddleIndex;
+ else
+   return true;  
+ MiddleIndex = ((LeftIndex + RightIndex) / 2);
+}//while (LeftIndex != RightIndex)
+
+return false;
+}
