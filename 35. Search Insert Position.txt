@@ -1,0 +1,45 @@
+int searchInsert(int* nums, int numsSize, int target){
+
+int LeftIndex = 0;
+int RightIndex = numsSize - 1;
+int MiddleIndex = (numsSize - 1) / 2;
+
+//One element
+if (numsSize == 1)
+{
+ if (nums[0] < target)
+  return 1;
+ else
+  return 0;
+}//if (numsSize == 1)
+
+while (LeftIndex != RightIndex)
+{
+ if ((RightIndex - LeftIndex) == 1)
+ {
+  if (nums[RightIndex] < target)
+   return (RightIndex+1);
+  else if (nums[RightIndex] == target)
+   return RightIndex;
+  else if (nums[LeftIndex] < target)
+   return (LeftIndex+1);
+  else if (nums[LeftIndex] == target)
+   return LeftIndex;
+  else
+  {
+    LeftIndex = (LeftIndex > 0)?(LeftIndex-1):(0);
+    return LeftIndex;
+  }//else
+    
+ }//if ((RightIndex - LeftIndex) == 1)
+
+ if (nums[MiddleIndex] <= target)
+  LeftIndex = MiddleIndex;
+ else 
+  RightIndex = MiddleIndex;
+
+ MiddleIndex = (LeftIndex + RightIndex) / 2;  
+}//while (LeftIndex != RightIndex)
+
+return -1;
+}
