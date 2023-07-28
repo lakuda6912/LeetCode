@@ -1,0 +1,32 @@
+double findMedianSortedArrays(int* nums1, int nums1Size, int* nums2, int nums2Size){
+   int i1 = 0;
+   int i2 = 0;
+   int i3 = 0;
+   int *pResultArray = malloc((nums1Size+nums2Size)*sizeof(int));
+
+    //Merge two arrays
+    while (i3 < (nums1Size+nums2Size))
+    {
+        if ((i1 < nums1Size) && (i2 < nums2Size))
+           if (nums1[i1] <= nums2[i2])
+              pResultArray[i3++] = nums1[i1++];
+           else
+              pResultArray[i3++] = nums2[i2++];
+        else if (i1 >= nums1Size)
+              pResultArray[i3++] = nums2[i2++];
+        else if (i2 >= nums2Size)
+              pResultArray[i3++] = nums1[i1++];              
+    }//while (i3 < (nums1Size+nums2Size))
+
+    //Find the median
+    double Result = 0;
+    if ((nums1Size+nums2Size) % 2 == 1)
+       Result = pResultArray[(nums1Size+nums2Size-1)/2];
+    else
+    {
+       Result = (pResultArray[(nums1Size+nums2Size)/2-1]+pResultArray[(nums1Size+nums2Size)/2]);
+       Result = Result / 2;
+    }//else
+
+    return Result;
+}
