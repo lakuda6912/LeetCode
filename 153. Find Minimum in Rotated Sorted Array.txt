@@ -1,0 +1,40 @@
+int findMin(int* nums, int numsSize){
+
+int LeftIndex = 0;
+int RightIndex = numsSize - 1;
+int MiddleIndex = (numsSize - 1) / 2;
+int PivotIndex = 0;
+
+//NumsSize = 1
+if (numsSize == 1)
+ return nums[0];
+
+//Find the rotated index
+while (LeftIndex != RightIndex)
+{
+ if ((RightIndex-LeftIndex) == 1)
+ {
+     if (nums[LeftIndex] > nums[RightIndex])
+      //PivotIndex = RightIndex;
+      return nums[RightIndex];
+     else
+      return nums[LeftIndex];
+  }//if ((RightIndex-LeftIndex) == 1)
+
+ if ((nums[MiddleIndex] > nums[LeftIndex]) && 
+     (nums[MiddleIndex] > nums[RightIndex]))
+  LeftIndex = MiddleIndex;
+ else if ((nums[MiddleIndex] < nums[LeftIndex]) && 
+          (nums[MiddleIndex] < nums[RightIndex]))
+  RightIndex = MiddleIndex;
+ else if ((nums[MiddleIndex] > nums[LeftIndex]) && 
+          (nums[MiddleIndex] < nums[RightIndex]))
+ {
+     return nums[LeftIndex];
+ }//else if
+  
+ MiddleIndex = (RightIndex + LeftIndex) / 2; 
+}//while (LeftIndex != RightIndex)
+
+return -1;
+}
