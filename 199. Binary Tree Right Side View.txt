@@ -18,7 +18,7 @@ struct queue
   int rear;
 };//struct queue
 
-struct queue* creatQueue(void)
+struct queue* createQueue(void)
 {
  struct queue* q = malloc(sizeof(struct queue));
  q->front = -1;
@@ -90,7 +90,7 @@ if (root == NULL)
 }//if
 
 //Create queue
-struct queue* q = creatQueue();
+struct queue* q = createQueue();
 enqueue(q, root);
 
 struct TreeNode* node;
