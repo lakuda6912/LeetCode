@@ -20,7 +20,7 @@ struct queue
 
 struct queue* creatQueue(void)
 {
- struct queue* q = malloc(sizeof(struct queue) * MAX_SIZE);
+ struct queue* q = malloc(sizeof(struct queue));
  q->front = -1;
  q->rear = -1;
  return q;
