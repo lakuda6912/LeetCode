@@ -1,0 +1,92 @@
+/**
+ * Definition for a Node.
+ * struct Node {
+ *     int val;
+ *     struct Node *left;
+ *     struct Node *right;
+ *     struct Node *next;
+ * };
+ */
+
+struct queue
+{
+  struct Node* node[4096-1];
+  int front;
+  int rear;
+};
+
+struct queue* createQueue(void)
+{
+  struct queue* q = malloc(sizeof(struct queue));
+  q->front = q->rear = -1;
+  return q;
+}
+
+bool isEmpty(struct queue* q)
+{
+  if (q->rear == -1)
+   return true;
+  else
+   return false; 
+}
+
+int queueSize(struct queue* q)
+{
+  return (q->rear - q->front + 1);
+}
+
+void enqueue(struct queue* q, struct Node* node)
+{
+  q->rear++;
+  q->node[q->rear] = node;
+  if (q->front == -1)
+   q->front = 0;
+}
+
+struct TreeNode* dequeue(struct queue* q)
+{
+  struct Node* node = q->node[q->front];
+  q->front++;
+  if (q->front > q->rear)
+   q->front = q->rear = -1;
+  return node; 
+}
+
+struct Node* connect(struct Node* root) {
+
+//NULL case
+if (root == NULL)
+{
+ return root;
+}
+
+struct queue* q = createQueue();
+enqueue(q, root);
+
+int size;
+struct Node* node1;
+struct Node* node2;
+while (!isEmpty(q))
+{
+ size = queueSize(q);
+ for (int i=0; i<size; i++)
+ {
+  node1 = dequeue(q);
+  //if (q->front != -1)
+  if (i < size-1)
+  {
+   node2 = (struct Node*)(q->node[q->front]);
+   node1->next = node2;
+  }
+
+  if (node1->left != NULL)
+   enqueue(q, node1->left);
+  if (node1->right != NULL)
+   enqueue(q, node1->right);   
+ }//for
+}//while
+
+
+return root;
+
+}
