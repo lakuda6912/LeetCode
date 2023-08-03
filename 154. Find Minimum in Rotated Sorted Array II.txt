@@ -1,0 +1,59 @@
+#include <stdio.h>
+bool equal(int* nums, int LeftIndex, int RightIndex)
+{
+ for (int i=LeftIndex; i<=RightIndex; i++)
+ {
+  if (nums[i] != nums[LeftIndex])
+   return false;
+ }//for
+ return true;
+}
+
+int findMin(int* nums, int numsSize){
+
+int LeftIndex = 0;
+int RightIndex = numsSize - 1;
+int MiddleIndex = (numsSize - 1) / 2;
+int PivotIndex = 0;
+
+//NumsSize = 1
+if (numsSize == 1)
+ return nums[0];
+
+//Find the rotated index
+while (LeftIndex != RightIndex)
+{
+ //fprintf(stdout,"%d %d %d\n",LeftIndex,MiddleIndex,RightIndex);   
+ if ((RightIndex-LeftIndex) == 1)
+ {
+     if (nums[LeftIndex] > nums[RightIndex])
+      //PivotIndex = RightIndex;
+      return nums[RightIndex];
+     else
+      return nums[LeftIndex];
+  }//if ((RightIndex-LeftIndex) == 1)
+
+ if ((nums[MiddleIndex] > nums[LeftIndex]) && 
+     (nums[MiddleIndex] > nums[RightIndex]))
+  LeftIndex = MiddleIndex;   
+ else if ((nums[MiddleIndex] < nums[LeftIndex]) && 
+          (nums[MiddleIndex] < nums[RightIndex]))
+  RightIndex = MiddleIndex;
+ else
+ {
+     bool flag1 = equal(nums, LeftIndex, MiddleIndex);
+     bool flag2 = equal(nums, MiddleIndex, RightIndex);
+     if (flag1 == true)
+      LeftIndex = MiddleIndex;
+     else if (flag2 == true)
+      RightIndex = MiddleIndex; 
+     else   
+      return nums[LeftIndex];
+ }//else if
+   
+ MiddleIndex = (RightIndex + LeftIndex) / 2; 
+}//while (LeftIndex != RightIndex)
+
+return -1;
+
+}
