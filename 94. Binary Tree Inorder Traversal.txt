@@ -1,0 +1,45 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     struct TreeNode *left;
+ *     struct TreeNode *right;
+ * };
+ */
+/**
+ * Note: The returned array must be malloced, assume caller calls free().
+ */
+ #include <stdio.h>
+ void depthfirstSearch(struct TreeNode* node, int* returnArray, int* Size)
+ {
+   struct TreeNode* temp = node;
+   //while (temp != NULL)
+   if (temp != NULL)
+   {
+    if (temp->left != NULL)
+     depthfirstSearch(temp->left, returnArray, Size);
+
+    //returnArray = realloc(returnArray, sizeof(int) * (*Size+1));
+    returnArray[(*Size)++] = temp->val;
+
+    if (temp->right != NULL)
+     depthfirstSearch(temp->right, returnArray, Size);
+   }//while
+ }
+
+int* inorderTraversal(struct TreeNode* root, int* returnSize){
+
+if (root == NULL)
+{
+ *returnSize = 0;
+ return NULL;
+}//if
+
+int *returnArray = malloc(sizeof(int) * 100);
+*returnSize = 0;
+
+depthfirstSearch(root, returnArray, returnSize);
+
+return returnArray;
+
+}
