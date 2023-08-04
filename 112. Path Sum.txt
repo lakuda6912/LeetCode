@@ -1,0 +1,45 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     struct TreeNode *left;
+ *     struct TreeNode *right;
+ * };
+ */
+ #include <stdio.h>
+ void depthfirstSearch(struct TreeNode* node, int target, int* sum, bool *returnFlag)
+ {
+   struct TreeNode* temp = node;
+   if (temp != NULL)
+   {
+    *sum += temp->val;
+
+    if (temp->left != NULL)
+     depthfirstSearch(temp->left, target, sum, returnFlag);
+
+    if (temp->right != NULL)
+     depthfirstSearch(temp->right, target, sum, returnFlag);
+
+    if (
+        (temp->left == NULL) && 
+        (temp->right == NULL) &&
+        (*sum == target)
+        ) 
+         *returnFlag = true;
+
+    *sum -= temp->val;
+   }//if (temp != NULL)
+ }
+
+bool hasPathSum(struct TreeNode* root, int targetSum){
+
+if (root == NULL)
+ return false;
+
+int sum = 0;
+bool returnFlag = false;
+
+depthfirstSearch(root, targetSum, &sum, &returnFlag);
+
+return returnFlag;
+}
