@@ -1,0 +1,57 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     struct TreeNode *left;
+ *     struct TreeNode *right;
+ * };
+ */
+
+#include <stdio.h>
+void depthfirstSearch(struct TreeNode* node, long minVal, long maxVal, bool *returnFlag)
+{
+   struct TreeNode* temp = node;
+
+   if (*returnFlag == false)
+    return;
+
+   if (temp != NULL)
+   {
+    if (temp->left != NULL)
+    {
+        if (
+            (temp->left->val < temp->val) &&
+            (temp->left->val > minVal) &&
+            (temp->left->val < maxVal)
+           ) 
+         depthfirstSearch(temp->left, minVal, temp->val, returnFlag);
+        else
+         *returnFlag = false;
+    }//if
+
+    if (temp->right != NULL)
+    {
+        if (
+            (temp->right->val > temp->val) &&
+            (temp->right->val > minVal) &&
+            (temp->right->val < maxVal)
+           ) 
+         depthfirstSearch(temp->right, temp->val, maxVal, returnFlag);
+        else
+         *returnFlag = false;
+    }//if
+  }//if
+
+  //if (node != NULL)
+  // fprintf(stdout,"%d %d %d %d\n",*returnFlag, node->val, minVal, maxVal);
+}
+
+bool isValidBST(struct TreeNode* root){
+
+long minVal = -2147483648 - 1;
+long maxVal = 2147483648;
+bool returnFlag = true;
+
+depthfirstSearch(root, minVal, maxVal, &returnFlag);
+return returnFlag;
+}
