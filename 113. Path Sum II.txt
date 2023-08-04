@@ -1,0 +1,70 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     struct TreeNode *left;
+ *     struct TreeNode *right;
+ * };
+ */
+/**
+ * Return an array of arrays of size *returnSize.
+ * The sizes of the arrays are returned as *returnColumnSizes array.
+ * Note: Both returned array and *columnSizes array must be malloced, assume caller calls free().
+ */
+#include <stdio.h>
+#define MAX_SIZE 5000
+void depthfirstSearch(struct TreeNode* node, int target, int* sum, int* returnSize, int* returnColumnSizes, int** returnValue, int* tempValue, int* tempValueId)
+ {
+   struct TreeNode* temp = node;
+   //int i = 0;
+
+   if (temp != NULL)
+   {
+    *sum += temp->val;
+    tempValue[(*tempValueId)++] = temp->val;
+
+    if (temp->left != NULL)
+     depthfirstSearch(temp->left, target, sum, returnSize, returnColumnSizes, returnValue, tempValue, tempValueId);
+
+    if (temp->right != NULL)
+     depthfirstSearch(temp->right, target, sum, returnSize, returnColumnSizes, returnValue, tempValue, tempValueId);
+
+    if (
+        (temp->left == NULL) && 
+        (temp->right == NULL) &&
+        (*sum == target)
+        )
+    {     
+         returnColumnSizes[*returnSize] = (*tempValueId);
+         returnValue[*returnSize] = malloc(sizeof(int)*(*tempValueId));
+         for (int j=0; j<(*tempValueId); j++)
+           returnValue[*returnSize][j] = tempValue[j];
+         (*returnSize)++;
+    }//if     
+
+    *sum -= temp->val;
+    (*tempValueId)--;
+   }//if (temp != NULL)
+ }
+
+int** pathSum(struct TreeNode* root, int targetSum, int* returnSize, int** returnColumnSizes){
+
+if (root == NULL)
+{
+ *returnSize = 0;
+ *returnColumnSizes = NULL;
+ return NULL;
+}//if
+
+*returnSize = 0;
+*returnColumnSizes = (int *)malloc(sizeof(int *)*MAX_SIZE);
+int** returnValue = (int *)malloc(sizeof(int *)*MAX_SIZE);
+int* tempValue = (int *)malloc(sizeof(int)*MAX_SIZE);
+int tempValueId = 0;
+int sum = 0;
+
+depthfirstSearch(root, targetSum, &sum, returnSize, *returnColumnSizes, returnValue, tempValue, &tempValueId);
+
+return returnValue;    
+
+}
