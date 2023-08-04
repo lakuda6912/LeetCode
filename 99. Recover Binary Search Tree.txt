@@ -1,0 +1,68 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     struct TreeNode *left;
+ *     struct TreeNode *right;
+ * };
+ */
+#include <stdio.h>
+
+void depthfirstSearch(struct TreeNode* node, long minVal, long maxVal, bool* returnFlag)
+{
+   struct TreeNode* temp = node;
+
+   if (temp != NULL)
+   {
+    if (temp->left != NULL)
+    {
+        depthfirstSearch(temp->left, minVal, temp->val, returnFlag);
+
+        if (!(
+            (temp->left->val < temp->val) &&
+            (temp->left->val > minVal) &&
+            (temp->left->val < maxVal)
+           ))
+        {
+            int tempVal = temp->val;
+            temp->val = temp->left->val;
+            temp->left->val = tempVal;
+            *returnFlag = false;
+         }//if
+    }//if (temp->left != NULL)
+
+    if (temp->right != NULL)
+    {
+        depthfirstSearch(temp->right, temp->val, maxVal, returnFlag);
+
+        if (!(
+            (temp->right->val > temp->val) &&
+            (temp->right->val > minVal) &&
+            (temp->right->val < maxVal)
+           ))
+        {
+            int tempVal = temp->val;
+            temp->val = temp->right->val;
+            temp->right->val = tempVal;
+            *returnFlag = false;
+         }//if
+    }//if (temp->right != NULL)
+  }//if (temp != NULL)
+}
+
+void recoverTree(struct TreeNode* root){
+
+long minVal = -2147483648 - 1;
+long maxVal = 2147483648;
+bool returnFlag = true;
+
+int* returnArray = malloc(sizeof(int) * 1000);
+int size = 0;
+
+do
+{
+  returnFlag = true;
+  depthfirstSearch(root, minVal, maxVal, &returnFlag);
+} while (returnFlag == false);
+
+}
