@@ -1,0 +1,79 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     struct TreeNode *left;
+ *     struct TreeNode *right;
+ * };
+ */
+#define MIN_VAL -1000*3*10000
+
+void treeSum(struct TreeNode* node, long* maxSum, long* localMax, long* uploadMax)
+{
+   struct TreeNode* temp = node;
+   if (temp != NULL)
+   {
+    long localLeft = MIN_VAL;
+    long upLeft = MIN_VAL;
+    long localRight = MIN_VAL;
+    long upRight = MIN_VAL;
+
+    if (temp->left != NULL)
+      treeSum(temp->left, maxSum, &localLeft, &upLeft);
+
+    if (temp->right != NULL)
+     treeSum(temp->right, maxSum, &localRight, &upRight);
+
+    if ((temp->left == NULL) && (temp->right == NULL)) 
+    {
+     *localMax = temp->val;
+     *uploadMax = temp->val;
+    }
+    else
+    {
+      //uploadMax
+      *uploadMax = temp->val;
+      if (upLeft > upRight)
+      {
+        if (upLeft > 0)
+         *uploadMax = temp->val + upLeft;
+      }
+      else
+      {
+        if (upRight > 0)
+         *uploadMax = temp->val + upRight;
+      }
+
+      //localMax
+      *localMax = temp->val;
+      if (upLeft > 0)
+      {
+        *localMax += upLeft;
+      }
+      if (upRight > 0)
+      {
+         *localMax += upRight;
+      }
+    }
+
+    if (*localMax > *maxSum)
+     *maxSum = *localMax;
+    
+    //fprintf(stdout,"%d %d %d %d\n", temp->val, *localMax, *uploadMax, *maxSum); 
+   }//if (temp != NULL)
+}
+
+
+int maxPathSum(struct TreeNode* root){
+
+if ((root->left == NULL) && (root->right == NULL))
+ return root->val;
+
+long maxSum = MIN_VAL;
+long localMax = MIN_VAL;
+long uploadMax = MIN_VAL;
+treeSum(root, &maxSum, &localMax, &uploadMax); 
+
+return maxSum;
+
+}
