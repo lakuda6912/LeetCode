@@ -1,0 +1,175 @@
+/**
+ * Return an array of arrays of size *returnSize.
+ * The sizes of the arrays are returned as *returnColumnSizes array.
+ * Note: Both returned array and *columnSizes array must be malloced, assume caller calls free().
+ */
+#include <stdio.h> 
+#define MAX_SIZE 2500
+
+struct Node {
+      int x;
+      int y;
+      int z;
+ };
+
+struct queue
+{
+  struct Node* node[MAX_SIZE];
+  int front;
+  int rear;
+};
+
+struct queue* createQueue(void)
+{
+  struct queue* q = malloc(sizeof(struct queue));
+  q->front = q->rear = -1;
+  return q;
+}
+
+bool isEmpty(struct queue* q)
+{
+  if (q->rear == -1)
+   return true;
+  else
+   return false; 
+}
+
+int queueSize(struct queue* q)
+{
+  return (q->rear - q->front + 1);
+}
+
+void enqueue(struct queue* q, struct Node* node)
+{
+  q->rear++;
+  q->node[q->rear] = node;
+  if (q->front == -1)
+   q->front = 0;
+}
+
+struct Node* dequeue(struct queue* q)
+{
+  struct Node* node = q->node[q->front];
+  q->front++;
+  if (q->front > q->rear)
+   q->front = q->rear = -1;
+  return node; 
+}
+
+void logQueue(struct queue* q)
+{
+  int size = queueSize(q);
+  struct Node* node;
+
+  if ((size == 0) || (q->front == -1))
+  {
+   fprintf(stdout, "QUEUE empty\n"); 
+   return;
+  }//if ((size == 0) || (q->front == -1))
+   
+  fprintf(stdout,"QUEUE size = %d\n", size);
+  for (int i=0; i<size; i++)
+  {
+   node = q->node[q->front + i];
+   fprintf(stdout, "%d %d %d\n", node->x, node->y, node->z);
+  }//for (int i=0; i<size; i++)
+}
+
+int** floodFill(int** image, int imageSize, int* imageColSize, int sr, int sc, int color, int* returnSize, int** returnColumnSizes){
+
+struct queue* q = createQueue();
+
+struct Node* root = (struct Node*)malloc(sizeof(struct Node));
+root->x = sr;
+root->y = sc;
+root->z = image[sr][sc];
+enqueue(q, root);
+
+while (!isEmpty(q))
+{
+ int size = queueSize(q); 
+
+ for (int i=0; i<size; i++)
+ {
+   struct Node* node = dequeue(q);
+   struct Node* temp;
+
+   int x = node->x;
+   int y = node->y;
+   int z = node->z;
+   image[x][y] = color;
+
+   if ((x-1) >= 0)
+   {
+    if (
+       (image[x-1][y] != color) && 
+       (image[x-1][y] == z)
+       )
+       {
+         //logQueue(q);
+         temp = (struct Node*)malloc(sizeof(struct Node));
+         temp->x = x - 1;
+         temp->y = y;
+         temp->z = image[x-1][y];
+         enqueue(q, temp);
+         //logQueue(q);
+       }//if
+   }//if ((x-1) >= 0)
+   if ((x+1) < imageSize)
+   {
+    if (
+       (image[x+1][y] != color) && 
+       (image[x+1][y] == z)
+       )
+       {
+         //logQueue(q);
+         temp = (struct Node*)malloc(sizeof(struct Node));
+         temp->x = x + 1;
+         temp->y = y;
+         temp->z = image[x+1][y];
+         enqueue(q, temp);
+         //logQueue(q);
+       }//if
+   }//if ((x+1) < *imageColSize)
+   if ((y-1) >= 0)
+   {
+    if (
+       (image[x][y-1] != color) && 
+       (image[x][y-1] == z)
+       )
+       {
+         temp = (struct Node*)malloc(sizeof(struct Node));
+         temp->x = x;
+         temp->y = y - 1;
+         temp->z = image[x][y-1];
+         enqueue(q, temp);
+       }//if
+   }//if ((y-1) >= 0)
+   if ((y+1) < *imageColSize)
+   {
+    if (
+       (image[x][y+1] != color) && 
+       (image[x][y+1] == z)
+       )
+       {
+         temp = (struct Node*)malloc(sizeof(struct Node));
+         temp->x = x;
+         temp->y = y + 1;
+         temp->z = image[x][y+1];
+         enqueue(q, temp);
+       }//if   
+   }//if ((y+1) < *imageColSize)
+ }//for (int i=0; i<size; i++)
+ logQueue(q);
+}//while (!isEmpty(q))
+
+*returnSize = imageSize;
+*returnColumnSizes = (int *)malloc(sizeof(int *)*MAX_SIZE);
+
+for (int i=0; i<*returnSize; i++)
+{
+ (*returnColumnSizes)[i] = *imageColSize;
+}
+return image;
+
+}
