@@ -1,0 +1,28 @@
+#include <stdio.h>
+int numTrees(int n){
+
+if (n == 1)
+ return 1;
+
+int* num = malloc(sizeof(int) * 20);
+
+num[0] = 1;
+num[1] = 1;
+num[2] = 2;
+num[3] = 5;
+if (n >= 4)
+{
+ for (int i=4; i<=19; i++)
+ {
+  //root = 1, left = j, right = n-j-1
+  num[i] = 0;
+  for (int j=0; j<=(i-1); j++)
+  {
+    num[i] += (num[j] * num[i-j-1]);
+    fprintf(stdout, "%d %d = %d\n", j, i-j-1, num[i]);
+  }//for
+ }//for
+}//if
+
+return num[n];
+}
