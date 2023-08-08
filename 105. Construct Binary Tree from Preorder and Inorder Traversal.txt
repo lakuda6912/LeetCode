@@ -1,0 +1,87 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     struct TreeNode *left;
+ *     struct TreeNode *right;
+ * };
+ */
+#include <stdio.h>
+int ArrayIndex(int* input, int len, int val)
+{
+  for (int i=0; i<len; i++)
+  {
+    if (input[i] == val)
+      return i; 
+  }//for
+  return -1;
+}
+
+void logOrder(int* order, int len)
+{
+  for (int i=0; i<len; i++)
+  {
+   fprintf(stdout,"%d ",order[i]); 
+  }
+  fprintf(stdout,"\n"); 
+}
+
+struct TreeNode* buildsubTree(struct TreeNode* root, int* preorder, int preorderSize, int* inorder, int inorderSize)
+{
+  if (preorderSize == 1)
+  {
+   root->val = preorder[0]; 
+   root->left = NULL;
+   root->right = NULL;
+   return root;
+  }//if
+  
+  //Find the index (pId) of preorderSize[i] in inorder
+  root->val = preorder[0];
+  int pID = ArrayIndex(inorder, inorderSize, preorder[0]);
+
+  int len1, len2;
+  if (pID != -1)
+  {
+    len1 = pID;
+    if (len1 > 0)
+    {
+     root->left = (struct TreeNode*)malloc(sizeof(struct TreeNode));
+     buildsubTree(root->left, &(preorder[1]), len1, inorder, len1);
+    }//if
+    else
+    {
+     root->left = NULL;
+    }//else
+
+    len2 = preorderSize - len1 - 1;
+    
+    if (len2 > 0)
+    {    
+     int id = pID + 1;
+     root->right = (struct TreeNode*)malloc(sizeof(struct TreeNode));
+     buildsubTree(root->right, &(preorder[len1+1]), len2, &(inorder[id]), len2);
+    }//if
+    else
+    {
+      root->right = NULL;
+    }//else
+  }//if
+  return root;
+}
+
+struct TreeNode* buildTree(int* preorder, int preorderSize, int* inorder, int inorderSize){
+
+struct TreeNode* root = (struct TreeNode*)malloc(sizeof(struct TreeNode));
+if (preorderSize == 1)
+{
+  root->val = preorder[0];
+  root->left = root->right = NULL;
+  return root;  
+}//if (preorderSize == 1)
+
+root = buildsubTree(root, preorder, preorderSize, inorder, inorderSize);
+
+return root;
+}
+
