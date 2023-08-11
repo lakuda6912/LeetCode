@@ -1,0 +1,62 @@
+#include <stdio.h>
+
+int lengthOfLongestSubstring(char * s){
+
+if (s[0] == NULL)
+ return 0;
+
+int left = 0;
+int right = 0;
+int i;
+bool* visited = (bool *)malloc(sizeof(bool) * 200);
+for (i=0; i<200; i++)
+ visited[i] = false;
+
+i = 0;
+int len = 0;
+while (s[i] != NULL)
+{
+ len++; 
+ i++;
+}//while
+if (len == 1)
+ return 1;
+
+int maxRe = -1;
+int re = 0;
+
+while (right < len)
+{
+  int i = (int)(s[right]);
+  //fprintf(stdout,"%d %d\n", left, right);
+  if (visited[i] == false)
+  {
+    visited[i] = true;
+    re++;
+  }//if 
+  else
+  {
+    //fprintf(stdout,"checking %d %d\n", left, right);
+    if (re > maxRe)
+     maxRe = re;
+
+    int j;
+    while ((int)s[left] != (int)s[right])
+    {
+      j = (int)(s[left]);
+      visited[j] = false;
+      //fprintf(stdout,"left=%d %d\n",left,j);
+      left++;
+    }//while
+    left++;
+    re = right - left + 1;
+  }//else
+
+  if (re > maxRe)
+    maxRe = re;
+
+  right++;
+}//while
+
+return maxRe;
+}
