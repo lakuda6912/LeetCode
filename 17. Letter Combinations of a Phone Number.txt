@@ -1,0 +1,47 @@
+#include <stdio.h>
+char map[10][5]={{},{},{'a','b','c'},{'d','e','f'},{'g','h','i'},{'j','k','l'},{'m','n','o'},{'p','q','r','s'},{'t','u','v'},{'w','x','y','z'}};
+
+char temp[5] = {};
+//
+void genCombinations(char* digits, int index, int** re, int* reSize)
+{
+ if (index >= strlen(digits))
+ {
+  temp[strlen(digits)] = '\0';
+  re[*reSize] = malloc(sizeof(char)*sizeof(temp));
+  strcpy(re[*reSize],temp);
+  fprintf(stdout,"re=%s\n",re[*reSize]);
+  (*reSize)++;
+  return;
+ }
+ 
+ int d = (int)(digits[index]-'0'); 
+ for (int i=0; i<strlen(map[d]); i++)
+ {
+   temp[index] = map[d][i];
+   genCombinations(digits, index+1, re, reSize);
+ }
+}
+
+char ** letterCombinations(char * digits, int* returnSize){
+
+if (strlen(digits) == 0)
+{
+  *returnSize = 0;
+  return NULL;
+}
+
+int size = 1;
+for (int i=0; i<strlen(digits); i++)
+{
+ size *= strlen(map[digits[i]-'0']);
+}
+//fprintf(stdout,"size=%d\n",size);
+
+//char** re = malloc(sizeof(char *) * size);
+int index = 0;
+*returnSize = 0;
+genCombinations(digits, index, re, returnSize);
+return re;
+
+}
