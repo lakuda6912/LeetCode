@@ -1,0 +1,86 @@
+#include <stdio.h>
+
+void memSetRow(int** dst, int row, int col, int len, int val)
+{
+    for (int i=0; i<len; i++)
+    {
+        dst[row][col+i] = val;
+    }
+}
+
+void memSetCol(int** dst, int row, int col, int len, int val)
+{
+    for (int i=0; i<len; i++)
+    {
+        dst[row+i][col] = val;
+    }
+}
+
+void memSetZero(int* dst, int len)
+{
+    for (int i=0; i<len; i++)
+    {
+        dst[i] = 0;
+    }    
+}
+
+void setZeroes(int** matrix, int matrixSize, int* matrixColSize){
+
+//check whether the 1st row/column need to be zeroed or not
+int reRow = 0;
+int reCol = 0;
+for (int i=0; i<*matrixColSize; i++)
+{
+    if (matrix[0][i] == 0)
+    {
+        reRow = 1;
+    }//if
+}//for
+for (int i=0; i<matrixSize; i++)
+{
+    if (matrix[i][0] == 0)
+    {
+        reCol = 1;
+    }//if
+}//for
+
+//set the 1st row/column based on zeros in matrix
+for (int i=1; i<matrixSize; i++)
+{
+    for (int j=1; j<*matrixColSize; j++)
+    {
+        if (matrix[i][j] == 0)
+        {
+            matrix[0][j] = 0;
+            matrix[i][0] = 0;
+         }//if 
+    }//for 
+}//for 
+
+//zero the rows/columns except 1st row/column
+for (int i=1; i<*matrixColSize; i++)
+{
+    if (matrix[0][i] == 0)
+    {
+         memSetCol(matrix,0,i,matrixSize,0);
+    }//if
+}//for
+for (int i=1; i<matrixSize; i++)
+{
+    if (matrix[i][0] == 0)
+    {
+        memSetRow(matrix,i,0,*matrixColSize,0);
+    }//if
+}//for
+
+//zero the 1st row/column
+if (reRow == 1)
+{
+    memSetRow(matrix,0,0,*matrixColSize,0);
+}
+if (reCol == 1)
+{
+    memSetCol(matrix,0,0,matrixSize,0);
+}
+
+}

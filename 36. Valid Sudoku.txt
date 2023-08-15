@@ -1,0 +1,81 @@
+#include <stdio.h>
+
+int visited[10] = {0,0,0,0,0,0,0,0,0,0};
+
+void memSet(int* dst, int val, int len)
+{
+ for (int i=0; i<len; i++)
+ {
+  dst[i] = val;
+ }
+}
+
+bool isValidMatrix(char** board)
+{
+    for (int i=0; i<9; i++)
+    {
+        memSet(visited, 0, 10);
+
+        //fprintf(stdout,"%dth row %d %d\n",i, 5, visited[5]);
+        for (int j=0; j<9; j++)
+        {
+            if (board[i][j] != '.')
+            {
+                int d = (int)(board[i][j] - '0');
+                //fprintf(stdout,"%dth row %d %d\n",i, d, visited[d]);
+                if (visited[d] == 1)
+                {
+                 //fprintf(stdout,"%dth row %d %d\n",i, d, visited[d]);
+                 return false;
+                }
+                else
+                 visited[d] = 1; 
+            }//if (board[i][j] != '.')
+        }//for (int j=0; j<9; i++)
+    }//for (int i=0; i<9; i++)
+
+    //column
+    for (int i=0; i<9; i++)
+    {
+        memSet(visited, 0, 10);
+        for (int j=0; j<9; j++)
+        {
+            if (board[j][i] != '.')
+            {
+                int d = (int)(board[j][i] - '0');
+                if (visited[d] == 1)
+                 return false;
+                else
+                 visited[d] = 1; 
+            }//if (board[i][j] != '.')
+        }//for (int j=0; j<9; i++)
+    }//for (int i=0; i<9; i++)
+
+    int visitedSub[9][10];
+    memSet(visitedSub, 0, 90);
+    for (int i=0; i<9; i++)
+    {
+        for (int j=0; j<9; j++)
+        {
+            if (board[i][j] != '.')
+            {
+                int index = i/3*3+j/3;
+
+                int d = (int)(board[i][j] - '0');
+                if (visitedSub[index][d] == 1)
+                 return false;
+                else
+                 visitedSub[index][d] = 1; 
+            }//if (board[i][j] != '.')
+        }//for (int j=0; j<9; i++)
+    }//for (int i=0; i<9; i++)
+
+    return true;
+}
+
+
+bool isValidSudoku(char** board, int boardSize, int* boardColSize){
+
+return isValidMatrix(board);
+
+}
