@@ -1,0 +1,354 @@
+#include <stdio.h>
+
+void quickSort(int* nums, int len, int* leftBuff, int* rightBuff)
+{
+    if (len <= 1)
+     return;
+
+    //int* left = malloc(sizeof(int)*len);
+    //int* right = malloc(sizeof(int)*len);
+    int index1 = 0;
+    int index2 = 0;
+    for (int i=0; i<len-1; i++)
+    {
+        if (nums[i] < nums[len-1])
+        {
+            leftBuff[index1++] = nums[i];
+        }//if
+        else
+        {
+            rightBuff[index2++] = nums[i];
+        }//else
+    }//for
+    //fprintf(stdout,"index1=%d index2=%d\n",index1,index2);
+    
+    for (int i=0; i<index1; i++)
+    {
+        nums[i] = leftBuff[i];
+    }//for
+
+    nums[index1] = nums[len-1];
+
+    for (int i=0; i<index2; i++)
+    {
+        nums[index1+i+1] = rightBuff[i];
+    }//for
+    quickSort(nums, index1, leftBuff, rightBuff);
+    quickSort(&(nums[index1+1]), index2, leftBuff, rightBuff);
+    
+}
+
+int longestConsecutive(int* nums, int numsSize){
+
+if (numsSize == 0)
+{
+    return 0;
+}//if
+else if (numsSize == 1)
+{
+    return 1;
+}
+else if (numsSize == 2)
+{
+    if ((nums[0] == nums[1]+1) || (nums[0] == nums[1]-1))
+    return 2;
+    else return 1;
+}
+
+/*
+//bubble sort
+for (int i=numsSize-1; i>=0; i--)
+{
+    for (int j=0; j<=i-1; j++)
+    {
+        if (nums[j] > nums[j+1])
+        {
+            int temp = nums[j];
+            nums[j] = nums[j+1];
+            nums[j+1] = temp;
+        }//if
+    }//for
+}//for
+*/
+
+//quick sort
+int* leftBuff = malloc(sizeof(int)*numsSize);
+int* rightBuff = malloc(sizeof(int)*numsSize);
+//if (numsSize >= 100000/16)
+//numsSize /= 16;
+quickSort(nums, numsSize, leftBuff, rightBuff);
+
+int findlongest(int* nums, long numSize)
+{
+int left = 0;
+int right = 1;
+int re = 1;
+int reMax = 0;
+while (right < numsSize)
+{
+    if (nums[right] == (nums[left]+1))
+    {
+        left = right;
+        right++;
+        re++;
+    }//if
+    else if (nums[right] == (nums[left]))
+    {
+        right++;
+    }
+    else
+    {
+        left = right;
+        right++;
+        re = 1;
+    }//else
+
+    if (re > reMax)
+    {
+        reMax = re;
+        //re = 0;
+    }//if
+}//while
+
+return reMax;
+}
+
+return findlongest(nums, numsSize);
+
+/*
+struct Node {
+     int val;
+     struct Node *pre;
+     struct Node *next;
+};
+struct Node* link = malloc(sizeof(struct Node));
+struct Node* head = link;
+
+void printLink(struct Node* node)
+{
+    if (node == NULL)
+    {
+        fprintf(stdout,"empty list !!!\n");
+    }
+
+    while (node != NULL) 
+    {
+        fprintf(stdout,"%d ",node->val);
+        node = node->next;
+    }
+    fprintf(stdout,"\n");
+}
+
+for (int i=0; i<numsSize; i++)
+{
+    link->val = nums[i];
+    if (i == 0) 
+    {
+        link->pre = NULL;
+    }
+    if (i == numsSize - 1) 
+    {
+        link->next = NULL;
+        break;
+    }
+    link->next = malloc(sizeof(struct Node));
+    link->next->pre = link;
+    link = link->next;
+}
+//printLink(head);
+//return 0;
+
+#define BUFSIZE 1
+int* buff = malloc(sizeof(int)*BUFSIZE);
+for (int i=0; i<BUFSIZE; i++)
+{
+    buff[i] = 0;
+}
+
+struct Node* left = head;
+struct Node* right = head;
+int longest = 1;
+int re = 0;
+
+while (head->next != NULL)
+{
+    int init = head->val;
+    int val = init;
+    left = head;
+    right = head;
+    longest = 1;
+
+    int count = 0;
+    while (left != NULL)
+    {
+        if (left->val == val-1)
+        {
+            if (left->pre == NULL)
+            {
+                if (left->next != NULL)
+                {
+                    left->next->pre = NULL;
+                 }
+            }
+            else if (left->next == NULL)
+            {
+                if (left->pre != NULL)
+                 left->pre->next = NULL;
+            }
+            else
+            {
+                left->pre->next = left->next;
+                left->next->pre = left->pre;
+            }
+
+            int count = 0;
+            for (int i=0; i<BUFSIZE; i++)
+            {
+                if (buff[i] == 1)
+                {
+                    count++;
+                }
+                else
+                {
+                    break;
+                }
+            }
+
+            //for (int i=0; i<10; i++)
+            //{
+            //    fprintf(stdout,"%d ",buff[i]);
+            //}
+            //fprintf(stdout,"\n");  
+            //fprintf(stdout,"search for %d done !!!\n",val-1);
+            //fprintf(stdout,"count below %d = %d\n",val-1,count);
+
+            val -= (1+count);
+            longest += (1+count);
+            left = head;  
+            
+            for (int i=0; i<BUFSIZE; i++)
+            {
+                buff[i] = 0;
+            }            
+         }
+         else
+        {
+            if ((left->val <= val-1-1) && (left->val >= val-1-BUFSIZE))
+            {
+                buff[val-2-left->val] = 1;
+                //fprintf(stdout,"%d is marked !!!\n",left->val);
+            }
+
+           //for (int i=0; i<10; i++)
+           //{
+           //     fprintf(stdout,"%d ",buff[i]);
+           //}
+           //fprintf(stdout,"\n");              
+
+            left = left->next;
+        }
+    }
+    //fprintf(stdout,"left direction done !!!\n");
+    //printLink(head);
+    //fprintf(stdout,"longest = %d\n",longest);
+
+    for (int i=0; i<BUFSIZE; i++)
+    {
+        buff[i] = 0;
+    }  
+
+    val = init;
+    while (right != NULL)
+    {
+        if (right->val == val+1)
+        {
+            if (right->pre == NULL)
+            {
+                if (right->next != NULL)
+                {
+                    right->next->pre = NULL; 
+                }
+                 
+            }
+            else if (right->next == NULL)
+            {
+                if (right->pre != NULL)
+                {
+                    right->pre->next = NULL;
+                }
+                 
+            }
+            else
+            {
+                right->pre->next = right->next;
+                right->next->pre = right->pre;
+            }
+
+            int count = 0;
+            for (int i=0; i<BUFSIZE; i++)
+            {
+                if (buff[i] == 1)
+                {
+                    count++;
+                }
+                else
+                {
+                    break;
+                }
+            }
+
+            //for (int i=0; i<10; i++)
+            //{
+            //    fprintf(stdout,"%d ",buff[i]);
+            //}
+            //fprintf(stdout,"\n");  
+            //fprintf(stdout,"search for %d done !!!\n",val-1);
+            //fprintf(stdout,"count above %d = %d\n",val+1,count);
+
+            val += (1+count);
+            longest += (1+count);
+            right = head;
+
+            for (int i=0; i<BUFSIZE; i++)
+            {
+                buff[i] = 0;
+            }                        
+        }
+        else
+        {
+            if ((right->val >= val+1+1) && (right->val <= val+1+BUFSIZE))
+            {
+                buff[right->val-val-2] = 1;
+            }
+
+            right = right->next;
+        }
+    }
+
+    //fprintf(stdout,"right direction done !!!\n");
+    //printLink(head);
+    //fprintf(stdout,"longest = %d\n",longest);
+
+    for (int i=0; i<BUFSIZE; i++)
+    {
+        buff[i] = 0;
+    }   
+
+    if (head->next != NULL)
+    {
+        head->next->pre = NULL;
+        head = head->next;
+    }
+    if (longest > re)
+    {
+        re = longest;
+    }
+    longest = 0;
+    //fprintf(stdout,"final link\n");
+    //printLink(head);
+}
+return re;
+*/
+
+
+}
