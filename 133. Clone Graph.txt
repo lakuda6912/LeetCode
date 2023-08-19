@@ -1,0 +1,51 @@
+/**
+ * Definition for a Node.
+ * struct Node {
+ *     int val;
+ *     int numNeighbors;
+ *     struct Node** neighbors;
+ * };
+ */
+#include <stdio.h>
+
+struct Node* dfs(struct Node* origin, struct Node** map)
+{
+  //fprintf(stdout,"origin val=%d \n",origin->val);
+  //for (int i=0; i<origin->numNeighbors; i++)
+  //  fprintf(stdout,"... val=%d \n",origin->neighbors[i]->val);
+
+  if ((map)[origin->val] != NULL)
+  {
+    //fprintf(stdout,"%d already created\n",origin->val);
+    return ((map)[origin->val]);
+  }
+
+  (map)[origin->val] = malloc(sizeof(struct Node));
+  (map)[origin->val]->val = origin->val;
+  (map)[origin->val]->numNeighbors = origin->numNeighbors;
+  (map)[origin->val]->neighbors = malloc(sizeof(struct Node*)*origin->numNeighbors);
+
+  for (int i=0; i<origin->numNeighbors; i++)
+  {
+    (map)[origin->val]->neighbors[i] = dfs(origin->neighbors[i],map);
+  }
+  
+return (map)[origin->val];
+}
+
+struct Node *cloneGraph(struct Node *s) {
+
+if (s == NULL)
+{
+    return NULL;
+}
+
+struct Node** map = malloc(sizeof(struct Node*) * 101);
+for (int i=0; i<101; i++)
+{
+  map[i] = malloc(sizeof(struct Node*));
+  map[i] = NULL;
+}
+
+return dfs(s,map);
+}
