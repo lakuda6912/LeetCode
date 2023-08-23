@@ -1,0 +1,149 @@
+#include <stdio.h>
+#include <string.h>
+
+char a[4] = {'a','b','c','d'};
+char b[2] = {'b','c'};
+int count = 0;
+
+int stringMatch(char *src1, int len1, char* src2, int len2)
+{
+    if (len1 < len2)
+    {
+        return -1;
+    }
+    for (int i=0; i<len2; i++)
+    {
+        if (src1[i] != src2[i])
+        {
+            return -1;
+        }
+    }
+    return len2;
+}
+
+int stringComp(char* dst, int start, int end, char* src, int len)
+{
+    //fprintf(stdout,"%s %s %d\n", dst, src, len);
+    int i, j = 0;
+    for (i=start; i<=end; i++)
+    {
+        if (dst[i] == src[j++])
+        {
+            if (j == len) 
+            {
+                return i-len+1;
+            }
+        }
+        else
+        {
+            j = 0;
+        }
+    }
+    return -1;
+}
+
+bool dfs(char *s, int start, int end, char ** wordDict, int wordDictSize, int** temp3)
+{
+    int index = -1;
+    bool re1 = false;
+    bool re2 = false;
+
+    for (int i=0; i<wordDictSize; i++)
+    {
+        int index = stringComp(s, start, end, wordDict[i], strlen(wordDict[i]));
+        if (index != -1)
+        {
+            int ls = start;
+            int le = index-1;
+            int rs = index+strlen(wordDict[i]);
+            int re = end;
+        //fprintf(stdout,"left:%d %d (%s  %d %d) right:%d %d\n", ls, le, wordDict[i],index, index+strlen(wordDict[i])-1, rs, re);
+
+            temp3[index][index+strlen(wordDict[i])-1] = 1;
+            
+            if ((ls > le) || (temp3[ls][le] == 1))
+            {
+                re1 = true;
+                //return true;
+                //fprintf(stdout,"EMPTY  %d %d\n",ls, le);
+            }
+            else if (temp3[ls][le] == 0)
+            {
+                re1 = dfs(s, ls, le, wordDict, wordDictSize, temp3);
+                if (re1 == true)
+                {
+                    temp3[ls][le] = 1;
+                    temp3[ls][le + strlen(wordDict[i])] = 1;  
+                }
+                else
+                {
+                    temp3[ls][le] = -1;
+                }
+            }
+            else if (temp3[ls][le] == -1)
+            {
+                //fprintf(stdout,"temp3[%d][%d]=-1\n",start,index);
+                return false;
+            }
+
+            if ((rs > re) || (temp3[rs][re] == 1))
+            {
+                re2 = true;
+                //return true;
+                //fprintf(stdout,"EMPTY  %d %d\n",rs, re);
+            }
+            else if (temp3[rs][re] == 0)
+            {
+                re2 = dfs(s, rs, re, wordDict, wordDictSize, temp3);
+                if (re2 == true)
+                {
+                    temp3[rs][re] = 1;
+                }
+                else
+                {
+                    temp3[rs][re] = -1;
+                }   
+            }
+            else if (temp3[rs][re] == -1)
+            {
+                //fprintf(stdout,"temp3[%d][%d]=-1\n",rs,re);
+                return false;
+            }
+
+            //fprintf(stdout,"JUDGE: re1 = %d re2 = %d\n", re1, re2);                   
+            if ((re1 == true) && (re2 == true))
+            {
+                 //fprintf(stdout,"DONE %d %d\n",start,end);
+                 return true;
+            }
+        }
+    }
+    return false;
+}
+
+bool wordBreak(char * s, char ** wordDict, int wordDictSize){
+
+int** temp3 = calloc((strlen(s)+1),sizeof(int*));
+for (int i=0; i<=strlen(s); i++)
+{
+    temp3[i] = calloc(strlen(s),sizeof(int));
+}
+
+
+//bubble sort
+for (int i=wordDictSize-1; i>=0; i--)
+{
+    for (int j=0; j<=i-1; j++)
+    {
+        if (strlen(wordDict[j]) < strlen(wordDict[j+1]))
+        {
+            char* temp = wordDict[j];
+            wordDict[j] = wordDict[j+1];
+            wordDict[j+1] = temp;
+        }
+    }
+}
+
+
+return dfs(s, 0, strlen(s)-1, wordDict, wordDictSize, temp3);
+}
