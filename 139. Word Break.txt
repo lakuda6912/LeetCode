@@ -44,7 +44,6 @@ int stringComp(char* dst, int start, int end, char* src, int len)
 
 bool dfs(char *s, int start, int end, char ** wordDict, int wordDictSize, int** temp3)
 {
-    int index = -1;
     bool re1 = false;
     bool re2 = false;
 
@@ -57,14 +56,13 @@ bool dfs(char *s, int start, int end, char ** wordDict, int wordDictSize, int** 
             int le = index-1;
             int rs = index+strlen(wordDict[i]);
             int re = end;
-        //fprintf(stdout,"left:%d %d (%s  %d %d) right:%d %d\n", ls, le, wordDict[i],index, index+strlen(wordDict[i])-1, rs, re);
+        //fprintf(stdout,"left:%d %d (#%d=%s  %d %d) right:%d %d\n", ls, le, i,wordDict[i],index, index+strlen(wordDict[i])-1, rs, re);
 
             temp3[index][index+strlen(wordDict[i])-1] = 1;
             
             if ((ls > le) || (temp3[ls][le] == 1))
             {
                 re1 = true;
-                //return true;
                 //fprintf(stdout,"EMPTY  %d %d\n",ls, le);
             }
             else if (temp3[ls][le] == 0)
@@ -79,17 +77,17 @@ bool dfs(char *s, int start, int end, char ** wordDict, int wordDictSize, int** 
                 {
                     temp3[ls][le] = -1;
                 }
+                //fprintf(stdout,"temp3[%d][%d]=%d\n",ls,le,temp3[ls][le]);
             }
             else if (temp3[ls][le] == -1)
             {
-                //fprintf(stdout,"temp3[%d][%d]=-1\n",start,index);
-                return false;
+                re1 = false;
+                //fprintf(stdout,"temp3[%d][%d]=%d\n",ls,le,temp3[ls][le]);
             }
 
             if ((rs > re) || (temp3[rs][re] == 1))
             {
                 re2 = true;
-                //return true;
                 //fprintf(stdout,"EMPTY  %d %d\n",rs, re);
             }
             else if (temp3[rs][re] == 0)
@@ -102,20 +100,23 @@ bool dfs(char *s, int start, int end, char ** wordDict, int wordDictSize, int** 
                 else
                 {
                     temp3[rs][re] = -1;
-                }   
+                }
+                //fprintf(stdout,"temp3[%d][%d]=%d\n",rs,re,temp3[rs][re]);
             }
             else if (temp3[rs][re] == -1)
             {
-                //fprintf(stdout,"temp3[%d][%d]=-1\n",rs,re);
-                return false;
+                re2 = false;
+                //fprintf(stdout,"temp3[%d][%d]=%d\n",rs,re,temp3[rs][re]);
             }
 
-            //fprintf(stdout,"JUDGE: re1 = %d re2 = %d\n", re1, re2);                   
             if ((re1 == true) && (re2 == true))
             {
+                 temp3[ls][re] = 1;
                  //fprintf(stdout,"DONE %d %d\n",start,end);
                  return true;
             }
+            //fprintf(stdout,"left:%d %d (%s  %d %d) right:%d %d ", ls, le, wordDict[i],index, index+strlen(wordDict[i])-1, rs, re);            
+            //fprintf(stdout,"===> %d %d\n",re1,re2);
         }
     }
     return false;
@@ -129,7 +130,7 @@ for (int i=0; i<=strlen(s); i++)
     temp3[i] = calloc(strlen(s),sizeof(int));
 }
 
-
+/*
 //bubble sort
 for (int i=wordDictSize-1; i>=0; i--)
 {
@@ -143,7 +144,8 @@ for (int i=wordDictSize-1; i>=0; i--)
         }
     }
 }
-
+*/
 
 return dfs(s, 0, strlen(s)-1, wordDict, wordDictSize, temp3);
+
 }
