@@ -1,0 +1,119 @@
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     struct ListNode *next;
+ * };
+ */
+#include <stdio.h>
+
+int findMin(int* val, int len, int* index)
+{
+  int minVal = 10001;
+  for (int i=0; i<len; i++)
+  {
+    if (val[i] < minVal)
+    {
+      minVal = val[i];
+      *index = i;
+    }
+  }
+  return minVal;
+}
+
+void logData(int* val, int len)
+{
+  for (int i=0; i<len; i++)
+  {
+    fprintf(stdout,"%d ",val[i]);
+  }
+  fprintf(stdout,"\n");
+}
+
+void logData1(struct ListNode** node, int len)
+{
+  for (int i=0; i<len; i++)
+  {
+    fprintf(stdout,"%d ",node[i]->val);
+  }
+  fprintf(stdout,"\n");
+}
+
+struct ListNode* mergeKLists(struct ListNode** lists, int listsSize){
+
+struct ListNode** re = malloc(sizeof(struct ListNode*)*10000);
+struct ListNode** ptr = malloc(sizeof(struct ListNode*)*listsSize);
+int* val = malloc(sizeof(int)*listsSize);
+
+if (listsSize == 0)
+ return NULL;
+else if (listsSize == 1)
+ return lists[0]; 
+
+//initialize lists pointer and values
+for (int i=0; i<10000; i++)
+ re[i] = NULL;
+
+for (int i=0; i<listsSize; i++)
+{
+  ptr[i] = lists[i];
+  if (ptr[i] != NULL)
+   val[i] = ptr[i]->val;
+  else
+   val[i] = 10001; 
+}
+
+//logData(val, 2);
+int index = 0;
+while (1)
+{
+  for (int i=0; i<listsSize-1; i++)
+  {
+    int j = 0;
+    int minVal = findMin(val, listsSize, &j);
+
+    if (minVal == 10001)
+    {
+     //fprintf(stdout,"BREAK %d\n",index); 
+     //logData(val, 2);
+     //logData1(re, index);
+
+     int head = 0;
+     for (int k=0; k<index-1; k++)
+     {
+       if (re[k] != NULL)
+       {
+         head = k;
+         break;
+       }
+     }      
+     for (int k=head; k<index-1; k++)
+     {
+       if (re[k] != NULL)
+       {
+         int m;
+         for (m=k+1; m<index; m++)
+         {
+           if (re[m] != NULL)
+            re[k]->next = re[m];
+            break;
+         }
+         if (m == index)
+          re[k]->next = NULL;
+       }
+     }     
+     return re[head];
+    }
+
+    re[index++] = ptr[j];
+
+    ptr[j] = ptr[j]->next;
+    if (ptr[j] != NULL)
+      val[j] = ptr[j]->val;
+    else
+      val[j] = 10001;
+  }
+}
+
+return NULL;
+}

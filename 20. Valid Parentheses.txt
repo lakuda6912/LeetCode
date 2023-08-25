@@ -1,0 +1,91 @@
+#include <stdio.h>
+#define MAX 10000
+
+// Creating a stack
+struct stack {
+  char items[MAX];
+  int top;
+};
+
+struct stack* createEmptyStack() {
+  struct stack* st = malloc(sizeof(struct stack));
+  st->top = -1;
+  return st;
+}
+
+// Check if the stack is full
+bool isfull(struct stack *st) {
+  if (st->top == MAX - 1)
+    return true;
+  else
+    return false;
+}
+
+// Check if the stack is empty
+bool isempty(struct stack *st) {
+  if (st->top == -1)
+    return true;
+  else
+    return false;
+}
+
+// Add elements into stack
+void push(struct stack *st, char item) {
+  if (isfull(st)) {
+    fprintf(stdout,"STACK FULL\n");
+  } else {
+    st->top++;
+    st->items[st->top] = item;
+  }
+}
+
+// Remove element from stack
+char pop(struct stack *st) {
+  if (isempty(st)) {
+    fprintf(stdout,"STACK EMPTY \n");
+  } else {
+    char re = st->items[st->top];
+    fprintf(stdout,"Item popped= %d\n", re);
+    st->top--;
+    return re;
+  }
+  return NULL;
+}
+
+bool isValid(char * s){
+
+if (strlen(s) == 1)
+ return false;
+
+struct stack* st = createEmptyStack();
+char item;
+for (int i=0; i<strlen(s); i++)
+{
+  if ((s[i] == '(') || (s[i] == '[') || (s[i] == '{'))
+  {
+    push(st,s[i]);
+  }
+  else if (s[i] == ')')
+  {
+    item = pop(st);
+    if (item != '(')
+     return false;
+  }
+  else if (s[i] == ']')
+  {
+    item = pop(st);
+    if (item != '[')
+     return false;
+  }
+  else if (s[i] == '}')
+  {
+    item = pop(st);
+    if (item != '{')
+     return false;
+  }
+ }
+ if (!isempty(st))
+  return false;
+
+return true;
+}
