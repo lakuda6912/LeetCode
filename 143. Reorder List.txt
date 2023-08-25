@@ -1,0 +1,56 @@
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     struct ListNode *next;
+ * };
+ */
+#include <stdio.h> 
+void reorderList(struct ListNode* head){
+
+if (head->next == NULL)
+ return head;
+
+//count the number of nodes
+int num = 1;
+struct ListNode* temp = head;
+while (temp->next != NULL)
+{
+    num++;
+    temp = temp->next;
+}
+
+//indicate the middle of the list
+int i = 1;
+struct ListNode* middle = head;
+while (i <= (num)/2)
+{
+    i++;
+    middle = middle->next;
+}
+//fprintf(stdout,"%d %d %d\n",num, temp->val,middle->val);
+
+//reverse the second half of the list
+struct ListNode** reverse = malloc(sizeof(struct ListNode*)*((num-1)/2));
+for (i=num-1; i>=num/2+1; i--)
+{
+    temp = head;
+    for (int j=0; j<i; j++)
+     temp = temp->next;
+    reverse[(num-1)-i] = temp;
+    //fprintf(stdout,"%d\n",reverse[(num-1)-i]->val);
+}
+
+//insert to the first half list
+temp = head;
+middle->next = NULL;
+for (i=0; i<(num-1)/2; i++)
+{
+  reverse[i]->next = temp->next;
+  temp->next = reverse[i];
+
+  temp = temp->next->next;
+} 
+
+return head;
+}

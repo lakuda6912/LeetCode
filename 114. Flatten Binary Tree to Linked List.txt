@@ -1,0 +1,49 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     struct TreeNode *left;
+ *     struct TreeNode *right;
+ * };
+ */
+#include <stdio.h> 
+
+void flattenHelper(struct TreeNode* node)
+{
+    if (node == NULL) return;
+
+    //fprintf(stdout,"%d\n",node->val);
+    flattenHelper(node->left);
+    flattenHelper(node->right);
+
+    if (node->left != NULL)
+    {
+     //fprintf(stdout,"%d\n",node->val);   
+     struct TreeNode* tempHead = node->left;
+     struct TreeNode* tempTail = node->left;
+     while (tempTail->right != NULL)
+      tempTail = tempTail->right;
+
+     if (node->right != NULL)
+     {
+      tempTail->right = node->right;
+      node->left = NULL;
+      node->right = tempHead;        
+     }
+     else
+     {
+      node->left = NULL;    
+      node->right = tempHead;
+     }
+    }
+}
+
+void flatten(struct TreeNode* root){
+
+if (root == NULL)
+ return NULL;
+
+flattenHelper(root);
+
+return NULL;
+}
