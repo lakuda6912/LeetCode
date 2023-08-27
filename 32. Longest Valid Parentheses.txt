@@ -1,0 +1,123 @@
+#include <stdio.h>
+#define MAX 30000
+
+// Creating a stack
+struct stack {
+  char items[MAX];
+  int top;
+};
+
+struct stack* createEmptyStack() {
+  struct stack* st = malloc(sizeof(struct stack));
+  st->top = -1;
+  return st;
+}
+
+// Check if the stack is full
+bool isFull(struct stack *st) {
+  if (st->top == MAX - 1)
+    return true;
+  else
+    return false;
+}
+
+// Check if the stack is empty
+bool isEmpty(struct stack *st) {
+  if (st->top == -1)
+    return true;
+  else
+    return false;
+}
+
+// Add elements into stack
+void push(struct stack *st, char item) {
+  if (isFull(st)) {
+    //fprintf(stdout,"STACK FULL\n");
+  } else {
+    //fprintf(stdout,"Item pushed = %c\n", item);
+    st->top++;
+    st->items[st->top] = item;
+  }
+}
+
+// Remove element from stack
+char pop(struct stack *st) {
+  if (isEmpty(st)) {
+    //fprintf(stdout,"STACK EMPTY \n");
+  } else {
+    char re = st->items[st->top];
+    //fprintf(stdout,"Item popped = %c\n", re);
+    st->top--;
+    return re;
+  }
+  return NULL;
+}
+
+void logStack(struct stack* st)
+{
+  for (int i=0; i<=st->top; i++)
+  {
+    fprintf(stdout,"%c ",st->items[i]);
+  }
+  fprintf(stdout,"\n");
+}
+
+int longestValidParentheses(char * s){
+
+if (s == NULL)
+ return 0;
+
+struct stack* st = createEmptyStack();
+int re = 0;
+char* temp = malloc(sizeof(char)*MAX);
+int count = 0;
+
+for (int i=0; i<strlen(s); i++)
+{
+    if (s[i] == '(')
+    {
+        push(st,s[i]);
+    }
+    else if (s[i] == ')')
+    {
+      count = 0;
+      char temp1;
+      while (1)
+      {
+        temp1 = pop(st);
+        temp[count++] = temp1;         
+        if ((temp1 == '(') || (temp1 == NULL))
+          break;         
+      }//while (1)
+      if (temp1 == '(')
+      {
+        for (int i=0; i<count-1; i++)
+          push(st,temp[i]);
+         push(st,'.');
+      }
+      else //if (temp1 == NULL)
+      {
+        for (int i=0; i<count-1; i++)
+          push(st,temp[i]);
+        push(st,s[i]);        
+      }
+     
+    }
+    //logStack(st);
+}
+logStack(st);
+
+count = 0;
+while (!isEmpty(st))
+{
+  temp = pop(st);
+  if (temp == '.')
+   count++;
+  else 
+   count = 0;
+  if (count > re) 
+   re = count; 
+}
+
+return re*2;
+}
