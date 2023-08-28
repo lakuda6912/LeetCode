@@ -1,0 +1,44 @@
+#include <stdlib.h>
+#include <stdio.h>
+
+int threeSumClosest(int* nums, int numsSize, int target){
+
+//bubble sort
+for (int i = 0; i < numsSize; i++) {
+  for (int j = 0; j < i; j++) {
+    if (nums[j] > nums[i]) {
+      int temp = nums[j];
+      nums[j] = nums[i];
+      nums[i] = temp;
+    }
+  }
+}
+
+int left;
+int right;
+int diff = 3000 + 10000 + 1;
+int re = 0;
+for (int i=0; i<numsSize; i++)
+{
+    left = i+1;
+    right = numsSize-1;
+    while (left < right)
+    {
+        int sum = nums[i] + nums[left] + nums[right];
+        if (abs(sum - target) < diff)
+        {
+            re = sum;
+            diff = abs(sum - target);
+        }
+        if (sum > target)
+         right--;
+        else if (sum < target) 
+         left++;
+        else
+         return sum;
+        //fprintf(stdout,"%d %d %d %d\n", re, nums[i], nums[left], nums[right]); 
+    }
+}
+
+return re;
+}

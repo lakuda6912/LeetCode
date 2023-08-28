@@ -1,0 +1,80 @@
+/**
+ * Return an array of arrays of size *returnSize.
+ * The sizes of the arrays are returned as *returnColumnSizes array.
+ * Note: Both returned array and *columnSizes array must be malloced, assume caller calls free().
+ */
+int** threeSum(int* nums, int numsSize, int* returnSize, int** returnColumnSizes){
+
+*returnSize = 0;            // number of return pairs
+int step = 512;             // each memory alloc
+*returnColumnSizes = (int*)malloc(sizeof(int*)*step); 
+int** result = (int**)malloc(sizeof(int*)*step);
+//int** resultIndex = (int**)malloc(sizeof(int*)*step);
+
+int i,j,k,m;
+int temp;
+int flag = 0;
+
+//void bubble_sort(int arr[], int n) {
+  for (i = 0; i < numsSize; i++) {
+    for (j = 0; j < i; j++) {
+      if (nums[j] > nums[i]) {
+        temp = nums[j];
+        nums[j] = nums[i];
+        nums[i] = temp;
+      }
+    }
+  }
+
+int LowIndex, HighIndex;
+for (i=0; i<numsSize; i++)
+{
+LowIndex = i + 1;
+HighIndex = numsSize - 1;
+while (LowIndex < HighIndex)
+{
+    if ((nums[LowIndex]+nums[HighIndex]) < -nums[i])
+    {
+      LowIndex++;
+    }
+    else if ((nums[LowIndex]+nums[HighIndex]) > -nums[i])
+    {
+      HighIndex--;
+    }
+    else
+    {
+      flag = 0;
+      for (int m=0; m<*returnSize; m++)
+      {
+        if ((nums[i] == result[m][0]) &&
+            (nums[LowIndex] == result[m][1]) &&
+            (nums[HighIndex] == result[m][2]))
+        {
+          flag = 1;
+          LowIndex++;
+          HighIndex--;
+        }
+      }
+      if (flag == 0)
+      {
+        if((*returnSize) != 0 && (*returnSize)%step == 0){// Create space
+          *returnColumnSizes = (int*)realloc(*returnColumnSizes, sizeof(int*) * ((*returnSize)+step));
+          result = (int**)realloc(result, sizeof(int*) * ((*returnSize)+step));
+        }
+        (*returnColumnSizes)[*returnSize] = 3;
+        result[*returnSize] = (int*)malloc(sizeof(int)*3);
+        result[*returnSize][0] = nums[i];
+        result[*returnSize][1] = nums[LowIndex];
+        result[*returnSize][2] = nums[HighIndex];
+        (*returnSize)++;
+        LowIndex++;
+        HighIndex--;
+      }//if (flag == 0)
+    }//else
+}//while (LowIndex < LowIndex)
+}//for (i=0; i<numsSize; i++)
+
+return result;
+
+
+}
