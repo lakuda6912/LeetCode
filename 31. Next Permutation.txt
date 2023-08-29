@@ -1,0 +1,82 @@
+#include <stdio.h>
+void nextPermutation(int* nums, int numsSize){
+
+if (numsSize == 1)
+ return nums;
+
+//find the biggest one (pivot) in the desceding sub sequence in the end
+int temp = -1;
+int i;
+for (i=numsSize-1; i>=0; i--)
+{
+  if (nums[i] >= temp)
+   temp = nums[i];
+  else
+   break; 
+}
+int pivot = i+1;
+//fprintf(stdout,"nums[%d]=%d\n",pivot,temp);
+
+//rotate the sub sequence
+for (int i=pivot; i<(numsSize-1-pivot)/2+pivot+1; i++)
+{
+  temp = nums[i];
+  nums[i] = nums[numsSize-1-i+pivot];
+  nums[numsSize-1-i+pivot] = temp;
+}
+//for (int i=0; i<numsSize; i++)
+// fprintf(stdout,"%d ",nums[i]);
+//fprintf(stdout,"\n"); 
+
+//find the one to be replaced (pivot1)
+temp = 1001;
+int pivot1 = pivot - 1;
+if (pivot == 0)
+ return nums;
+
+for (int i=pivot-1; i<numsSize; i++)
+{
+  if ((nums[i] > nums[pivot-1]) && (nums[i] < temp))
+  {
+    pivot1 = i;
+    temp = nums[i];
+  }
+}
+//fprintf(stdout,"pivot=%d pivot1=%d\n",pivot, pivot1);
+
+//replacement
+if (pivot1 == pivot)
+{
+  temp = nums[pivot-1];
+  nums[pivot-1] = nums[pivot];
+  nums[pivot] = temp;
+}
+else
+{
+  temp = nums[pivot-1];
+  nums[pivot-1] = nums[pivot1];
+  nums[pivot1] = temp;  
+
+//for (int i=0; i<numsSize; i++)
+// fprintf(stdout,"%d ",nums[i]);
+//fprintf(stdout,"\n"); 
+
+for (int i=pivot; i<numsSize-1; i++)
+{
+  if (nums[i] > nums[i+1])
+  {
+    temp = nums[i];
+    nums[i] = nums[i+1];
+    nums[i+1] = temp;
+  }
+}
+
+//for (int i=0; i<numsSize; i++)
+// fprintf(stdout,"%d ",nums[i]);
+//fprintf(stdout,"\n"); 
+
+}
+
+
+return nums;
+}

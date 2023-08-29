@@ -1,0 +1,88 @@
+/**
+ * Return an array of arrays of size *returnSize.
+ * The sizes of the arrays are returned as *returnColumnSizes array.
+ * Note: Both returned array and *columnSizes array must be malloced, assume caller calls free().
+ */
+#include <stdio.h> 
+int** fourSum(int* nums, int numsSize, int target, int* returnSize, int** returnColumnSizes){
+
+*returnSize = 0;            // number of return pairs
+int step = 512;             // each memory alloc
+*returnColumnSizes = (int*)malloc(sizeof(int*)*step); 
+int** result = (int**)malloc(sizeof(int*)*step);
+//int** resultIndex = (int**)malloc(sizeof(int*)*step);
+
+int i,j,k,m;
+int temp;
+int flag = 0;
+
+//void bubble_sort(int arr[], int n) {
+  for (i = 0; i < numsSize; i++) {
+    for (j = 0; j < i; j++) {
+      if (nums[j] > nums[i]) {
+        temp = nums[j];
+        nums[j] = nums[i];
+        nums[i] = temp;
+      }
+    }
+  }
+
+int index1, index2, index3;
+for (i=0; i<numsSize; i++)
+{
+for (index1 = i + 1; index1 < numsSize; index1++)
+{
+index2 = index1 + 1;
+index3 = numsSize - 1;
+while (index2 < index3)
+{
+    long sum = (long)nums[i] + (long)nums[index1] + (long)nums[index2] + (long)nums[index3];
+    //fprintf(stdout,"%d %d %d %d %d\n", sum, nums[i], nums[index1], nums[index2], nums[index3]);
+    if (sum < target)
+    {
+      index2++;
+    }
+    else if (sum > target)
+    {
+      index3--;
+    }
+    else
+    {
+      flag = 0;
+      
+      for (int m=0; m<*returnSize; m++)
+      {
+        if ((nums[i] == result[m][0]) &&
+            (nums[index1] == result[m][1]) &&
+            (nums[index2] == result[m][2]) &&
+            (nums[index3] == result[m][3]))
+        {
+          flag = 1;
+          index2++;
+          index3--;
+        }
+      }
+      if (flag == 0)
+      {
+        if((*returnSize) != 0 && (*returnSize)%step == 0){// Create space
+          *returnColumnSizes = (int*)realloc(*returnColumnSizes, sizeof(int*) * ((*returnSize)+step));
+          result = (int**)realloc(result, sizeof(int*) * ((*returnSize)+step));
+        }
+        (*returnColumnSizes)[*returnSize] = 4;
+        result[*returnSize] = (int*)malloc(sizeof(int)*4);
+        result[*returnSize][0] = nums[i];
+        result[*returnSize][1] = nums[index1];
+        result[*returnSize][2] = nums[index2];
+        result[*returnSize][3] = nums[index3];
+        (*returnSize)++;
+        index2++;
+        index3--;
+      }//if (flag == 0)
+    }//else
+}//while (LowIndex < LowIndex)
+}
+}//for (i=0; i<numsSize; i++)
+
+return result;
+
+}
