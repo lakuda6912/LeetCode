@@ -1,0 +1,56 @@
+#include <stdio.h>
+int removeDuplicates(int* nums, int numsSize){
+
+if (numsSize <= 2)
+ return numsSize;
+
+//left/right pointers to count the numbers and move the elements
+int left = 0;
+int right = numsSize - 1;
+int count = 0;
+int diff = 0;
+int temp = nums[left];
+while (left <= right)
+{
+    int count = 0;
+    if (nums[left] == nums[right])
+    {
+        count = right - left + 1;
+
+        if (count >= 3)
+        {
+            for (int i=left+2; i<numsSize-(count-2); i++)
+            {
+                nums[i] = nums[right+1+i-(left+2)];
+                //fprintf(stdout,"%d %d\n",i,right+1+i-(left+2));
+            }
+
+            diff += (count-2);
+            //fprintf(stdout,"diff = %d\n",diff);
+            left += 2;
+            right = numsSize - 1 - diff;
+        }
+        else
+        {
+            left = right + 1;
+            right = numsSize - 1 - diff;
+        }
+    }
+    else
+    {
+        //left++;
+        right--;
+    }
+
+    /*
+    for (int i=0; i<numsSize; i++)
+     fprintf(stdout,"%d ",nums[i]);
+    fprintf(stdout,"\n");
+    fprintf(stdout,"left = %d right = %d\n",left,right);
+    fprintf(stdout,"diff = %d\n",diff);
+*/
+
+}
+
+return numsSize-diff;
+}
