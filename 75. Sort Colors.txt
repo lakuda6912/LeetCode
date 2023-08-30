@@ -1,0 +1,75 @@
+#include <stdio.h>
+void sortColors(int* nums, int numsSize){
+
+if (numsSize == 1)
+ return;
+
+int left = 0;
+int right = numsSize - 1;
+
+//push 2 to the end
+while (left <= right)
+{
+    if (nums[left] == 2)
+    {
+        if (nums[right] != 2)
+        {
+            int temp = nums[left];
+            nums[left] = nums[right];
+            nums[right] = temp;
+            right--;
+            left++;
+        }
+        else
+        {
+            right--;
+        }    
+    }
+    else if (nums[left] != 2)
+    {
+        if (nums[right] == 2)
+         right--;
+        else
+        {
+            //right--;
+            left++;
+        } 
+    }
+}
+
+if (right < 0)
+ return;
+
+//push 1 to the end
+left = 0;
+right = (nums[right] == 2)?(right-1):(right);
+while (left <= right)
+{
+    if (nums[left] == 1)
+    {
+        if (nums[right] != 1)
+        {
+            int temp = nums[left];
+            nums[left] = nums[right];
+            nums[right] = temp;
+            right--;
+            left++;
+        }
+        else
+        {
+            right--;
+        }    
+    }
+    else if (nums[left] != 1)
+    {
+        if (nums[right] == 1)
+         right--;
+        else
+        {
+            left++;
+        } 
+    }
+}
+
+
+}
