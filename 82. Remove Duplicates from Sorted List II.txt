@@ -1,0 +1,92 @@
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     struct ListNode *next;
+ * };
+ */
+#include <stdio.h> 
+struct ListNode* deleteDuplicates(struct ListNode* head){
+
+if ((head == NULL) || (head->next == NULL))
+ return head;
+
+//count the number of nodes
+struct ListNode** nodes = malloc(sizeof(struct ListNode*)*300);
+struct ListNode* temp = head;
+int size = 0;
+while (temp != NULL)
+{
+    nodes[size++] = temp;
+    temp = temp->next;
+}
+//for (int j=0; j<size; j++)
+// fprintf(stdout,"%d ",nodes[j]->val);
+//fprintf(stdout,"\n"); 
+//fprintf(stdout,"%d\n",size);
+
+//array to indicate the redundancy
+int index = 0;
+int* indexArray = malloc(sizeof(int) * 300); 
+for (int i=0; i<300; i++)
+ indexArray[i] = 0;
+
+//scan the list to indicate the redundancy
+int left = 0;
+int right = size-1;
+while (left <= right)
+{
+    if (nodes[left]->val != nodes[right]->val)
+     right--;
+    else if (left == right)
+    {
+      left = right + 1;
+      right = size - 1; 
+    }
+    else
+    {
+      for (int k=left; k<=right; k++)
+        indexArray[k] = 1;
+
+      left = right + 1;
+      right = size-1;           
+    } 
+}
+
+int finalSize = 0;
+int finalHead = -1;
+for (int k=0; k<size; k++)
+{
+  //fprintf(stdout,"%d ",indexArray[k]);
+  if (indexArray[k] == 0)
+  {
+      if (finalHead == -1)
+       finalHead = k;
+      nodes[finalSize++] = nodes[k];
+  }
+}
+//fprintf(stdout,"\n");
+//fprintf(stdout,"size1=%d\n",finalSize);
+
+if (finalSize == 0)
+ return NULL;
+ 
+for (int k=0; k<finalSize-1; k++)
+{
+   nodes[k]->next = nodes[k+1];
+}
+nodes[finalSize-1]->next = NULL;
+
+/*
+struct ListNode* temp1 = nodes[0];
+while (temp1 != NULL)
+{
+   //nodes[i++] = temp;
+   fprintf(stdout,"%d ",temp1->val);
+   temp1 = temp1->next;
+}
+fprintf(stdout,"\n"); 
+*/    
+
+return nodes[0];//NULL;
+}
