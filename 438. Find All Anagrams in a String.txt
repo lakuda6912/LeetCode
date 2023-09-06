@@ -1,0 +1,62 @@
+/**
+ * Note: The returned array must be malloced, assume caller calls free().
+ */
+#include <stdio.h>
+#define LETTER_SIZE 26 
+#define MAX_SIZE 30000
+int* findAnagrams(char * s, char * p, int* returnSize){
+
+if (strlen(s) < strlen(p))
+{
+  *returnSize = 0;
+  return NULL;
+}
+
+int* cnt = calloc(LETTER_SIZE, sizeof(int));
+for (int i=0; i<strlen(p); i++)
+ cnt[p[i]-'a']++;
+
+//for (int i=0; i<LETTER_SIZE; i++)
+// fprintf(stdout,"%d ",cnt[i]);
+//fprintf(stdout,"\n");
+
+*returnSize = 0;
+int* cnt1 = calloc(LETTER_SIZE, sizeof(int));
+int* re = calloc(strlen(s), sizeof(int));
+int i,j;
+for (i=0; i<strlen(s)-strlen(p)+1; i++)
+{
+ if (i == 0)
+ {
+  for (j=0; j<LETTER_SIZE; j++)
+   cnt1[j] = 0;   
+
+  for (j=i; j<i+strlen(p); j++) //check
+  {
+   cnt1[s[j]-'a']++;
+  }
+ }
+ else
+ {
+   cnt1[s[i-1]-'a']--;
+   cnt1[s[i+strlen(p)-1]-'a']++;
+ } 
+
+ //for (j=0; j<LETTER_SIZE; j++)
+ // fprintf(stdout,"%c=%d ",j+'a',cnt1[j]); 
+ //fprintf(stdout,"\n"); 
+
+ for (j=0; j<LETTER_SIZE; j++)
+  if (cnt[j] != cnt1[j])
+   break;
+
+ if (j == LETTER_SIZE)
+ {
+   re[*returnSize] = i;
+   (*returnSize)++;
+   //fprintf(stdout,"index=%d\n",i); 
+ }
+}
+
+return re;
+}
