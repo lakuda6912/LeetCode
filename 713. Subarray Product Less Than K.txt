@@ -1,0 +1,44 @@
+#include <stdio.h>
+void self(int* nums, int numsSize, int k, int* re)
+{
+    for (int i=0; i<numsSize; i++)
+    {
+      if (nums[i] < k)
+      {
+        (*re)++;
+        //fprintf(stdout,"%d %d %d\n",k,nums[i],*re);
+        self(&nums[i+1],numsSize-i-1,k/nums[i],re);
+      }
+      else{
+        return;
+      }
+    }
+}
+
+int numSubarrayProductLessThanK(int* nums, int numsSize, int k){
+
+if (k == 0)
+ return 0;
+
+//int re = 0;
+//self(nums, numsSize, k, &re);
+
+int re = 0;
+for (int i=0; i<numsSize; i++)
+{
+  int temp = 1;
+  for (int j=i; j<numsSize; j++)
+  {
+    temp *= nums[j];
+    if (temp < k)
+    {
+      re++;
+    }
+    else
+      break;
+    //fprintf(stdout,"%d %d\n",temp,re);
+  }
+}
+
+return re;
+}
