@@ -1,0 +1,105 @@
+/**
+ * Note: The returned array must be malloced, assume caller calls free().
+ */
+#include <stdio.h>
+#include <string.h> 
+
+
+int stringCompare(char* dst, int len, char** var, int* cnt, int wordCnt, char* temp, int* tempWordCnt)
+{
+  int i;
+  int ret = 0;
+  for (i=0; i<len; i+=strlen(var[0]))
+  {
+    char ch = dst[i+strlen(var[0])];
+    dst[i+strlen(var[0])] = '\0';
+    for (int j=0; j<wordCnt; j++)
+    {
+      if (strcmp(&dst[i],var[j]) == 0)
+      {
+        tempWordCnt[j]++;
+      }
+    }
+    dst[i+strlen(var[0])] = ch;
+  }
+  for (i=0; i<wordCnt; i++)
+  {
+    if (tempWordCnt[i] != cnt[i])
+     break;
+  }
+  if (i == wordCnt)
+   ret = 1;
+  else
+   ret = -1;
+
+  for (i=0; i<wordCnt; i++)
+  {
+    tempWordCnt[i] = 0;
+  }
+  return ret;
+}
+
+int* findSubstring(char * s, char ** words, int wordsSize, int* returnSize){
+
+char** var = calloc(wordsSize, sizeof(char*));
+int* cnt = calloc(wordsSize, sizeof(int));
+int wordCnt = 1;
+int j;
+var[0] = words[0];
+cnt[0] = 1;
+
+for (int i=1; i<wordsSize; i++)
+{
+  for (j=0; j<wordCnt; j++)
+  {
+    if (strcmp(var[j],words[i]) == 0)
+    {
+      cnt[j]++;
+      break;
+    }
+  }
+  if (j == wordCnt)
+  {
+    var[wordCnt] = words[i];
+    cnt[wordCnt] = 1;
+    wordCnt++;
+  }
+}
+
+//for (int i=0; i<wordCnt; i++)
+// fprintf(stdout,"%s ",var[i]);
+//fprintf(stdout,"\n");
+
+int totalWordCnt = 0;
+for (int i=0; i<wordCnt; i++)
+{
+  totalWordCnt += cnt[i];
+  //fprintf(stdout,"%d ",cnt[i]);
+}
+//fprintf(stdout,"\n");
+//fprintf(stdout,"wordCnt=%d\n",wordCnt);
+
+int* tempWordCnt = calloc(wordCnt, sizeof(int));
+//int* tempWordIndex = calloc(strlen(s), sizeof(int));
+//int* tempWordLocation = calloc(strlen(s), sizeof(int));
+char *tempString = calloc(strlen(s)+1, sizeof(char));
+
+*returnSize = 0;
+int* re = calloc(strlen(s), sizeof(int));
+
+if (strlen(s) < totalWordCnt*strlen(words[0]))
+ return NULL;
+
+for (int i=0; i<=strlen(s)-totalWordCnt*strlen(words[0]); i++)
+{
+  int ret = stringCompare(&s[i], totalWordCnt*strlen(words[0]), var, cnt, wordCnt, tempString, tempWordCnt);
+
+  if (ret >= 0)
+  {
+    re[*returnSize] = i;
+    (*returnSize)++;
+   }
+}
+return re;
+
+}
