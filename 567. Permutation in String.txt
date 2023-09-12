@@ -1,0 +1,60 @@
+#include <stdio.h>
+#include <string.h>
+
+bool checkInclusion(char * s1, char * s2){
+
+if (strlen(s2) < strlen(s1))
+ return false;
+
+int* CharCnt = calloc(26, sizeof(int));
+int* TempCharCnt = calloc(26, sizeof(int));
+
+for (int i=0; i<strlen(s1); i++)
+{
+  CharCnt[s1[i]-'a']++; 
+  //fprintf(stdout,"%c=%d ",s1[i],CharCnt[s1[i]-'a']);
+}
+//fprintf(stdout,"\n");
+
+int j;
+for (int i=0; i<=strlen(s2)-strlen(s1); i++)
+{
+  if (i == 0)
+  {
+   for (j=i; j<i+strlen(s1); j++)
+   {
+     TempCharCnt[s2[j]-'a']++;
+     //fprintf(stdout,"%c=%d ",s2[j],TempCharCnt[s2[j]-'a']);
+   }
+  }
+  else
+  {
+    j = i;
+    TempCharCnt[s2[j-1]-'a']--;
+    TempCharCnt[s2[j+strlen(s1)-1]-'a']++;
+  }
+
+  /*
+  //fprintf(stdout,"%d TempCharCnt\n",i);
+  for (j=i; j<i+strlen(s1); j++)
+  {
+    TempCharCnt[s2[j]-'a']++;
+    //fprintf(stdout,"%c=%d ",s2[j],TempCharCnt[s2[j]-'a']);
+  }
+  //fprintf(stdout,"\n");
+  */
+
+  for (j=0; j<26; j++)
+  {
+    if (CharCnt[j] != TempCharCnt[j])
+     break;
+  }
+  if (j == 26)
+   return true;
+
+  //for (j=0; j<26; j++)
+  //  TempCharCnt[j] = 0;
+}
+
+return false;
+}
