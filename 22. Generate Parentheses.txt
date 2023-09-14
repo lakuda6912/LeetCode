@@ -1,0 +1,51 @@
+/**
+ * Note: The returned array must be malloced, assume caller calls free().
+ */
+#include <stdio.h>
+
+bool flag = false;
+void dfs(int left, int right, char** re, int* returnSize, int n, char* temp, int index)
+{
+
+    //fprintf(stdout,"left=%d right=%d\n",left,right);
+    //fprintf(stdout,"%s\n",temp);     
+
+    if ((left == 0) && (right == 0))
+    {
+      re[*returnSize] = malloc((2*n+1)*sizeof(char));
+      //re[*returnSize] = realloc(re[*returnSize], (*returnSize+1)*(2*n+1)*sizeof(char));
+      strcpy(re[*returnSize],temp);
+      //fprintf(stdout,"final %s\n",re[*returnSize]);
+
+      (*returnSize)++;
+    }
+
+          {
+            if (left >= 1)
+            {
+             temp[index] = '(';
+             dfs(left-1, right, re, returnSize, n, temp, index+1);
+            }  
+            if (left < right)
+            {
+              temp[index] = ')';
+              dfs(left, right-1, re, returnSize, n, temp, index+1);
+            }
+          } 
+
+}
+
+char ** generateParenthesis(int n, int* returnSize){
+
+char** re = calloc(2000, sizeof(char*));
+char *temp = calloc(2*n+1, sizeof(char));
+
+int left = n;
+int right = n;
+int index = 0;
+*returnSize = 0;
+dfs(n, n, re, returnSize, n, temp, index);
+
+return re;
+
+}
