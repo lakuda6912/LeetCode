@@ -1,0 +1,34 @@
+#include <stdio.h>
+
+void expand(char* s, int l, int r, int* bestL, int* bestR)
+{
+  while ((l>=0) && (r<strlen(s)) && (s[l]==s[r]))
+  {
+      l--;
+      r++;
+      //fprintf(stdout,"l=%d r=%d\n",l,r);
+  }
+  l++;
+  r--;
+  if (r-l+1 > *bestR-*bestL+1)
+  {
+      *bestL = l;
+      *bestR = r;
+      //fprintf(stdout,"l=%d r=%d\n",*bestL,*bestR);
+  }
+}
+
+char * longestPalindrome(char * s){
+
+int l = 0;
+int r = 0;
+for (int i=0; i<strlen(s); i++)
+{
+  expand(s, i, i, &l, &r);
+  expand(s, i, i+1, &l, &r);
+}
+//fprintf(stdout,"l=%d r=%d\n",l,r);
+s[r+1] = '\0';
+
+return &s[l];
+}

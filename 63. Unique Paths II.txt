@@ -1,0 +1,27 @@
+#include <stdio.h>
+int uniquePathsWithObstacles(int** obstacleGrid, int obstacleGridSize, int* obstacleGridColSize){
+
+int m = obstacleGridSize;
+int n = *obstacleGridColSize;
+//fprintf(stdout,"m=%d n=%d\n",m,n);
+
+long* dp = calloc(n, sizeof(long));
+dp[n-1] = 1;
+
+for (int r=m-1; r>=0; r--)
+{
+ for (int c=n-1; c>=0; c--)
+ {
+   if (obstacleGrid[r][c] == 1)
+    dp[c] = 0;
+   else if (c+1 < n)
+   {
+     //fprintf(stdout,"c=%d dp[c]=%d dp[c+1]=%d\n",c,dp[c],dp[c+1]);
+     dp[c] = dp[c] + dp[c+1]; 
+   }
+ }
+}
+
+return dp[0];
+
+}
