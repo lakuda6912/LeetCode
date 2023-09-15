@@ -1,0 +1,26 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+int uniquePaths(int m, int n){
+
+int* row = calloc(n, sizeof(int));
+for (int i=0; i<n; i++)
+ row[i] = 1;
+
+int* newRow = calloc(n, sizeof(int));
+for (int j=0; j<m-1; j++)
+{
+  newRow[n-1] = 1;
+  for (int i=n-2; i>=0; i--)
+  {
+    newRow[i] = newRow[i+1] + row[i];
+    //fprintf(stdout,"%d ",newRow[i]);
+  }
+  //fprintf(stdout,"\n");
+
+//memcpy(row,newRow,n*sizeof(int));
+row = newRow;
+}
+
+return row[0];
+}
