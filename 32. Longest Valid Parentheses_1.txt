@@ -1,0 +1,55 @@
+#include <stdio.h>
+int longestValidParentheses(char * s){
+
+if (s == NULL)
+ return 0;
+
+int openN = 0;
+int closedN = 0;
+
+int maxLen = 0;
+for (int i=0; i<strlen(s); i++)
+{
+  if (s[i] == '(')
+   openN++;
+  else
+   closedN++;
+
+  if (openN == closedN)
+  {
+    int len = openN + closedN;
+    if (len > maxLen)
+     maxLen = len;
+  } 
+  else if (openN < closedN)
+  {
+    openN = 0;
+    closedN = 0;
+  }
+}
+
+openN = closedN = 0;
+for (int i=strlen(s)-1; i>=0; i--)
+{
+  if (s[i] == '(')
+   openN++;
+  else
+   closedN++;
+
+  if (openN == closedN)
+  {
+    int len = openN + closedN;
+    if (len > maxLen)
+     maxLen = len;
+  } 
+  else if (openN > closedN)
+  {
+    openN = 0;
+    closedN = 0;
+  }
+}
+
+
+return maxLen;
+
+}
