@@ -1,0 +1,41 @@
+#define MIN(a,b) (((a)<(b))?(a):(b))
+int minDistance(char * word1, char * word2){
+
+int m = strlen(word1);
+int n = strlen(word2);
+fprintf(stdout,"m=%d n=%d\n",m,n);
+
+int** dp = calloc((m+1), sizeof(int*));
+for (int i=0; i<m+1; i++)
+ dp[i] = calloc(n+1, sizeof(int));
+
+for (int i=0; i<n+1; i++)
+ dp[m][i] = n-i;
+for (int i=0; i<m+1; i++)
+ dp[i][n] = m-i;
+
+for (int r=m-1; r>=0; r--)
+{
+ for (int c=n-1; c>=0; c--)
+ {
+   if (word1[r] == word2[c])
+    dp[r][c] = dp[r+1][c+1];
+   else 
+    dp[r][c] = 1 + MIN(MIN(dp[r][c+1], dp[r+1][c]), dp[r+1][c+1]);
+ }
+} 
+
+/*
+for (int r=0; r<m+1; r++)
+{
+ for (int c=0; c<n+1; c++)
+ {
+   fprintf(stdout,"%d ",dp[r][c]);
+ }
+ fprintf(stdout,"\n");
+} 
+*/
+
+return dp[0][0];
+
+}
