@@ -4,25 +4,22 @@ int numTrees(int n){
 if (n == 1)
  return 1;
 
-int* num = malloc(sizeof(int) * 20);
-
+/*
 num[0] = 1;
 num[1] = 1;
-num[2] = 2;
-num[3] = 5;
-if (n >= 4)
+*/
+int* nums = calloc(20, sizeof(int));
+nums[0] = nums[1] = 1;
+for (int nodes=2; nodes<=n; nodes++)
 {
- for (int i=4; i<=19; i++)
- {
-  //root = 1, left = j, right = n-j-1
-  num[i] = 0;
-  for (int j=0; j<=(i-1); j++)
-  {
-    num[i] += (num[j] * num[i-j-1]);
-    fprintf(stdout, "%d %d = %d\n", j, i-j-1, num[i]);
-  }//for
- }//for
-}//if
+    for (int root=1; root<=nodes; root++)
+    {
+     int l = root - 1;
+     int r = nodes - root;
+     nums[nodes] += nums[l] * nums[r];
+     //fprintf(stdout,"nums[%d]=%d nums[%d]=%d nums[%d]=%d\n",nodes,nums[nodes],l,nums[l],r,nums[r]);
+    }
+}
 
-return num[n];
+return nums[n];
 }
