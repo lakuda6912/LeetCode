@@ -1,0 +1,62 @@
+#include <stdio.h>
+bool isInterleave(char * s1, char * s2, char * s3){
+
+if (strlen(s1)+strlen(s2) != strlen(s3))
+ return false;
+
+if ((strlen(s1) == 0) && (strlen(s2) == 0) && (strlen(s3) == 0))
+ return true;
+
+int m = strlen(s1);
+int n = strlen(s2);
+
+bool** dp = calloc((m+1), sizeof(bool*));
+for (int i=0; i<m+1; i++)
+ dp[i] = calloc(n+1, sizeof(bool));
+for (int i=0; i<m+1; i++)
+ for (int j=0; j<n+1; j++)
+  dp[i][j] = false; 
+dp[m][n] = true;  
+/*
+for (int i=0; i<m; i++)
+{
+    if (s1[i] == s3[n+i])
+     dp[i][n] = true;
+}
+for (int i=0; i<n; i++)
+{
+    if (s2[i] == s3[m+i])
+     dp[m][i] = true;
+}
+//dp[m][n] = true;
+for (int i=0; i<m+1; i++)
+{
+ for (int j=0; j<n+1; j++)
+ {
+   fprintf(stdout,"%d ",dp[i][j]);
+ }
+ fprintf(stdout,"\n");  
+}
+*/
+
+for (int r=m; r>=0; r--)
+ for (int c=n; c>=0; c--)
+ {
+     if ((r < m) && (s1[r] == s3[r+c]) && (dp[r+1][c] == true))
+       dp[r][c] = true;
+     if ((c < n) && (s2[c] == s3[r+c]) && (dp[r][c+1] == true))
+       dp[r][c] = true;
+ }
+/*
+fprintf(stdout,"final dp\n"); 
+for (int i=0; i<m+1; i++)
+{
+ for (int j=0; j<n+1; j++)
+ {
+   fprintf(stdout,"%d ",dp[i][j]);
+ }
+ fprintf(stdout,"\n");  
+}
+*/
+return dp[0][0];
+}
