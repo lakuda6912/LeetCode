@@ -11,49 +11,43 @@
  */
 #include <stdio.h>
 
-struct TreeNode** buildTree(int head, int tail, int* returnSize)
+struct TreeNode** buildTree(int left, int right, int* returnSize)
 {
-  struct TreeNode** root = malloc(sizeof(struct TreeNode*));
-  if (head > tail)
-  {
-    *returnSize = 1;    
-     root[0] = NULL;
-    return root;
-  }//if
 
-  *returnSize = 0;
-  for (int i=head; i<=tail; i++)
+  struct TreeNode** root;// = malloc(sizeof(struct TreeNode*));
+  if (left > right)
   {
-   int leftSize = 0;
-   int rightSize = 0;
-   struct TreeNode** leftNode = buildTree(head, i-1, &leftSize);
-   struct TreeNode** rightNode = buildTree(i+1, tail, &rightSize);
-   root = realloc(root, sizeof(struct TreeNode*)*(leftSize*rightSize+*returnSize));
-   for (int j=0; j<leftSize; j++)
-   {
-    for (int k=0; k<rightSize; k++)
-    {
-      root[*returnSize] = (struct TreeNode*)malloc(sizeof(struct TreeNode));
-      root[*returnSize]->val = i;
-      root[*returnSize]->left = leftNode[j];
-      root[*returnSize]->right = rightNode[k];
-      (*returnSize)++;
-     }//for
-   }//for 
-  }//for
-  return root;
+    root = malloc(sizeof(struct TreeNode*));
+    root[*returnSize] = NULL;
+    (*returnSize)++;
+    return root;
+  }
+
+  root = malloc(sizeof(struct TreeNode*));
+  for (int val=left; val<=right; val++)
+  {
+    int leftSize = 0;
+    int rightSize = 0;
+    struct TreeNode** leftTree = buildTree(left,val-1,&leftSize);
+    struct TreeNode** rightTree = buildTree(val+1,right,&rightSize);
+       
+    root = realloc(root,sizeof(struct TreeNode*)*((*returnSize)+(leftSize*rightSize)));
+    for (int i=0; i<leftSize; i++)
+     for (int j=0; j<rightSize; j++)
+     {
+       root[*returnSize] = malloc(sizeof(struct TreeNode));
+       root[*returnSize]->val = val;
+       root[*returnSize]->left = leftTree[i];
+       root[*returnSize]->right = rightTree[j];
+       (*returnSize)++;
+     }
+  }
+  
+return root;  
 }
 
 struct TreeNode** generateTrees(int n, int* returnSize){
 
+*returnSize = 0;
 return buildTree(1, n, returnSize);
-
-//if (n == 1)
-//{
-//  *returnSize = 0;
-//  return NULL;
-//}
-//*returnSize = 1;
-//return node;
-
 }
