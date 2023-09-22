@@ -1,0 +1,33 @@
+#include <stdio.h>
+
+bool dfs(char* s, int i, char* p, int j)
+{
+  if ((i >= strlen(s)) && (j >= strlen(p)))
+   return true;
+
+  if (j >= strlen(p))
+   return false;
+
+  bool match = (i < strlen(s)) && ((s[i]==p[j]) || (p[j]=='.')); 
+
+  if ((j+1 < strlen(p)) && (p[j+1] == '*'))
+  {
+    //if (match)
+    //  return dfs(s,i+1,p,j);
+    //else  
+    //  return dfs(s,i,p,j+2);
+    return (dfs(s,i,p,j+2)) || ((match) && (dfs(s,i+1,p,j)));
+  }
+
+  if (match)
+  {
+      return dfs(s,i+1,p,j+1);
+  }
+return false;  
+}
+
+bool isMatch(char * s, char * p){
+
+return dfs(s, 0, p, 0);
+
+}
