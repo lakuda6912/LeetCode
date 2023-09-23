@@ -1,0 +1,48 @@
+#include <stdio.h>
+
+bool dfs(int** dp, char* s, int i, char* p, int j)
+{
+  //fprintf(stdout,"s[%d]=%c p[%d]=%c\n",i,s[i],j,p[j]);
+
+  if ((i >= strlen(s)) && (j >= strlen(p)))
+   return true;
+
+  if (j >= strlen(p))
+     return false;
+
+  if (dp[i][j] != -1)
+   return dp[i][j];   
+
+  if (i >= strlen(s))
+  {
+    return (dp[i][j] = ((p[j] == '*') && dfs(dp,s,i,p,j+1)));
+  }
+
+  bool match = (i < strlen(s)) && ((s[i]==p[j]) || (p[j]=='?')); 
+
+  if ((j+1 <= strlen(p)) && (i+1 <= strlen(s)) && (p[j] == '*'))
+  {
+    return (dp[i][j] = dfs(dp,s,i+1,p,j) || dfs(dp,s,i,p,j+1) || dfs(dp,s,i+1,p,j+1));
+  }
+
+  if (match)
+  {
+      return (dp[i][j] = dfs(dp,s,i+1,p,j+1));
+  }
+return false;  
+}
+
+bool isMatch(char * s, char * p){
+
+int m = strlen(s);
+int n = strlen(p);
+
+int** dp = calloc(m+1, sizeof(int*));
+for (int i=0; i<m+1; i++)
+ dp[i] = calloc(n+1, sizeof(int));
+for (int i=0; i<m+1; i++)
+ for (int j=0; j<n+1; j++)
+  dp[i][j] = -1;
+
+return dfs(dp,s,0,p,0);
+}
