@@ -1,0 +1,120 @@
+#include <stdio.h>
+#define MAX_ITEMS 200
+#define MAX(a,b) ((a>b)?(a):(b))
+// Creating a stack
+struct stack {
+  int index[MAX_ITEMS];
+  int height[MAX_ITEMS];
+  int top;
+};
+
+struct stack* createEmptyStack() {
+  struct stack* st = malloc(sizeof(struct stack));
+  st->top = -1;
+  return st;
+}
+
+// Check if the stack is full
+bool isfull(struct stack *st) {
+  if (st->top == MAX_ITEMS - 1)
+    return true;
+  else
+    return false;
+}
+
+// Check if the stack is empty
+bool isempty(struct stack *st) {
+  if (st->top == -1)
+    return true;
+  else
+    return false;
+}
+
+// Add elements into stack
+void push(struct stack *st, int index, int height) {
+  {
+    st->top++;
+    st->index[st->top] = index;
+    st->height[st->top] = height;
+  }
+}
+
+// Remove element from stack
+void pop(struct stack *st, int* index, int* height) {
+  {
+     *index = st->index[st->top];
+    *height = st->height[st->top];
+    st->top--;
+
+  }
+}
+
+void dumpStack(struct stack *st)
+{
+    for (int i=0; i<=st->top; i++)
+     fprintf(stdout,"  %d     %d\n",st->index[i],st->height[i]);
+}
+
+int largestRectangleArea(int* heights, int heightsSize){
+
+struct stack* st = createEmptyStack();
+
+int indx, h;
+int maxArea = 0;
+for (int i=0; i<heightsSize; i++)
+{
+    fprintf(stdout,"i=%d\n",i);
+    int start = i;
+    while (!isempty(st))
+    {
+      if (heights[i] < st->height[st->top])
+      {
+        pop(st,&indx,&h);
+        maxArea = MAX(maxArea, (i-indx)*h);
+        start = indx;
+      }
+      else
+       break;
+    }
+    push(st, start, heights[i]);
+    //dumpStack(st);
+    //fprintf(stdout,"maxArea = %d\n",maxArea);
+}
+
+
+while(!isempty(st))
+{
+  pop(st,&indx,&h);
+  maxArea = MAX(maxArea, (heightsSize-indx)*h);
+}
+
+return maxArea;
+}
+
+int maximalRectangle(char** matrix, int matrixSize, int* matrixColSize){
+
+int m = matrixSize;
+int n = *matrixColSize;
+
+int* histogram = calloc(n, sizeof(int));
+int maxArea = 0;
+for (int i=0; i<m; i++)
+{
+    for (int j=0; j<n; j++)
+    {  
+        if (i == 0)
+         histogram[j] = matrix[i][j] - '0';
+        else if (matrix[i][j] != '0')
+         histogram[j] += (matrix[i][j]-'0');
+        else
+         histogram[j] = 0; 
+        //fprintf(stdout,"%d ",histogram[j]); 
+    }
+    //fprintf(stdout,"\n");
+    maxArea = MAX(maxArea, largestRectangleArea(histogram, n));
+    //maxArea = largestRectangleArea(histogram, n);
+    //fprintf(stdout,"maxArea = %d\n",maxArea);
+}
+
+return maxArea;
+}
