@@ -1,0 +1,144 @@
+#include <stdio.h>
+
+#define SIZE 100
+#define DELTA 10000
+#define MAX(a,b) ((a>b)?(a):(b))
+
+struct DataItem {
+   //int data;   
+   int key;
+};
+
+//struct DataItem* hashArray[SIZE]; 
+//struct DataItem* dummyItem;
+//struct DataItem* item;
+
+int hashCode(int key) {
+   return key % SIZE;
+}
+
+struct DataItem *search(struct DataItem** hashArray, int key) {
+   //get the hash 
+   int hashIndex = hashCode(key);  
+	
+   //move in array until an empty 
+   while(hashArray[hashIndex] != NULL) {
+	
+      if(hashArray[hashIndex]->key == key)
+         return hashArray[hashIndex]; 
+			
+      //go to next cell
+      ++hashIndex;
+		
+      //wrap around the table
+      hashIndex %= SIZE;
+   }        
+	
+   return NULL;        
+}
+
+/*
+struct DataItem* delete(struct DataItem* item) {
+   int key = item->key;
+
+   //get the hash 
+   int hashIndex = hashCode(key);
+
+   //move in array until an empty
+   while(hashArray[hashIndex] != NULL) {
+	
+      if(hashArray[hashIndex]->key == key) {
+         struct DataItem* temp = hashArray[hashIndex]; 
+			
+         //assign a dummy item at deleted position
+         hashArray[hashIndex] = dummyItem; 
+         return temp;
+      }
+		
+      //go to next cell
+      ++hashIndex;
+		
+      //wrap around the table
+      hashIndex %= SIZE;
+   }      
+	
+   return NULL;        
+}
+*/
+
+//void insert(int key,int data) {
+void insert(struct DataItem** hashArray, int key) {    
+
+   struct DataItem *item = (struct DataItem*) malloc(sizeof(struct DataItem));
+   //item->data = data;  
+   item->key = key;
+
+   //get the hash 
+   int hashIndex = hashCode(key);
+
+   //move in array until an empty or deleted cell
+   while(hashArray[hashIndex] != NULL && hashArray[hashIndex]->key != -1) {
+      //go to next cell
+      ++hashIndex;
+		
+      //wrap around the table
+      hashIndex %= SIZE;
+   }
+	
+   hashArray[hashIndex] = item;
+}
+
+void display(struct DataItem** hashArray) {
+   int i = 0;
+	
+   for(i = 0; i<SIZE; i++) {
+	
+      if(hashArray[i] != NULL)
+         //fprintf(stdout," (%d,%d)",hashArray[i]->key,hashArray[i]->data);
+         fprintf(stdout," (%d)",hashArray[i]->key);
+      else
+         fprintf(stdout," ~~ ");
+   }
+	
+   fprintf(stdout,"\n");
+}
+
+int longestConsecutive(int* nums, int numsSize){
+
+if (numsSize <= 1)
+ return numsSize;
+
+struct DataItem** hashArray = malloc(sizeof(struct DataItem*)*SIZE); 
+for (int i=0; i<SIZE; i++)
+ hashArray[i] = NULL;
+struct DataItem* dummyItem = malloc(sizeof(struct DataItem*)); 
+struct DataItem* item = malloc(sizeof(struct DataItem*));
+
+for (int i=0; i<numsSize; i++)
+ insert(hashArray, nums[i]+DELTA);
+//display(hashArray); 
+
+
+int longest = 0;
+int len = 0;
+for (int i=0; i<numsSize; i++)
+{
+    struct DataItem *item = search(hashArray, nums[i]+DELTA);
+    int key = item->key;
+    if (search(hashArray, key-1) == NULL)
+    {
+        len = 1;
+        while (search(hashArray, key+1) != NULL)
+        {
+          len++;
+          key++;
+        }
+        longest = MAX(longest,len);
+        //fprintf(stdout,"longest = %d\n",longest);
+    }
+}
+
+
+return longest;
+
+}
