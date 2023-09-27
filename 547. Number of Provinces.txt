@@ -1,0 +1,51 @@
+#include <stdio.h>
+#define MAX(a,b) ((a>b)?(a):(b))
+
+void dump(int** isConnected, int m, int n)
+{
+for (int i=0; i<m; i++)
+{
+    for (int j=0; j<n; j++)
+    {
+        fprintf(stdout,"%d ",isConnected[i][j]);
+    }
+    fprintf(stdout,"\n");
+}
+
+}
+
+void dfs(int* visited, int** isConnected, int m, int i)
+{
+   if (visited[i] == 1)
+    return;
+
+   visited[i] = 1;
+
+   for (int j=0; j<m; j++)
+    if (isConnected[i][j] == 1)
+      dfs(visited,isConnected,m,j);
+}
+
+int findCircleNum(int** isConnected, int isConnectedSize, int* isConnectedColSize){
+
+int m = isConnectedSize;
+if (m==1)
+{
+     return 1; 
+}
+
+int* visited = calloc(m, sizeof(int));
+int provinces = 0;
+for (int i=0; i<m; i++)
+{
+    if (visited[i] == 0)
+    {
+      provinces++;
+      dfs(visited, isConnected, m, i);
+    }
+     
+}
+
+return provinces;
+
+}
