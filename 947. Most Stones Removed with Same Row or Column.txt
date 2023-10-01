@@ -1,0 +1,128 @@
+#include <stdio.h>
+#define MAX(a,b) ((a>b)?(a):(b))
+int find(int* par, int n)
+{
+  int p = par[n];
+
+  while (p != par[p])
+  {
+      par[p] = par[par[p]];
+      p = par[p];
+  }
+  return p;
+}
+
+void union_(int* rank, int* par, int n1, int n2)
+{
+    int p1 = find(par, n1);
+    int p2 = find(par, n2);
+
+    if (p1 == p2)
+     return;
+
+    if (rank[p1] > rank[p2])
+    {
+        par[p2] = p1;
+        rank[p1] += rank[p2];
+    }
+    else
+    {
+        par[p1] = p2;
+        rank[p2] += rank[p1]; 
+    }
+    return;
+}
+
+void dfs(int** graph, int m, int r, int c)
+{
+  fprintf(stdout,"r=%d c=%d\n",r,c);
+  if ((r < 0) || (r > m-1) || (c < 0) || (c > m-1))
+    return;
+  if (graph[r][c] == 1)
+  {
+     //graph[r][c] = 0;
+     dfs(graph,m,r+1,c);
+     dfs(graph,m,r-1,c);
+     dfs(graph,m,r,c+1);
+     dfs(graph,m,r,c-1);
+  }
+}
+
+int StoneIndex(int**stones, int len, int r, int c)
+{
+   for (int i=0; i<len; i++)
+   {
+       if ((stones[i][0] == r) && (stones[i][1] == c))
+        return i;
+   }
+   return -1;
+}
+
+int removeStones(int** stones, int stonesSize, int* stonesColSize){
+
+int m = stonesSize;
+int* par = calloc(m, sizeof(int));
+for (int i=0; i<m; i++)
+ par[i] = i;
+int* rank = calloc(m, sizeof(int));
+for (int i=0; i<m; i++)
+ rank[i] = 1;
+
+for (int i=0; i<m; i++)
+{
+    int r = stones[i][0];
+    int c = stones[i][1];
+    for (int j=0; j<m; j++)
+    {
+        if ((r == stones[j][0]) || (c == stones[j][1]))
+        {
+            int i1 = StoneIndex(stones,m,r,c);
+            int i2 = StoneIndex(stones,m,stones[j][0],stones[j][1]);
+            union_(rank, par, i1, i2);
+        }
+    }
+}
+
+/*
+//dump par
+fprintf(stdout,"par:\n");
+for (int i=0; i<m; i++)
+ fprintf(stdout,"%d ",par[i]);
+fprintf(stdout,"\n"); 
+
+//dump rank
+fprintf(stdout,"rank:\n");
+for (int i=0; i<m; i++)
+ fprintf(stdout,"%d ",rank[i]);
+fprintf(stdout,"\n"); 
+*/
+
+int groups = 0;
+for (int i=0; i<m; i++)
+ if (par[i] == i)
+  groups++;
+fprintf(stdout,"group=%d\n",groups);  
+
+
+return m-groups;
+/*
+int moves = 0;
+for (int i=0; i<m; i++)
+{
+    for (int j=0; j<m; j++)
+    {
+        if (graph[i][j] == 1)
+        {
+            dfs(graph,m,i,j);
+            moves++;
+        }
+    }
+}
+fprintf(stdout,"moves=%d\n",moves);
+
+
+return moves;
+*/
+
+
+}
