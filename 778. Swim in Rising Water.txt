@@ -1,0 +1,45 @@
+#include <stdio.h>
+#define MIN(a,b) ((a>b)?(b):(a))
+#define MAX(a,b) ((a>b)?(a):(b))
+
+void dfs(int** dp, int m, int n, int r, int c, int** grid, int cur)
+{
+   if ((r < 0) || (r > m-1) || (c < 0) || (c > m-1) || (MAX(cur,grid[r][c]) >= dp[r][c]))// || (dp[r][c] != 10000))
+    return;
+
+   dp[r][c] = MAX(cur, grid[r][c]);
+   //fprintf(stdout,"r=%d c=%d cur=%d dp=%d\n",r,c,cur,dp[r][c]); 
+   dfs(dp,m,n,r+1,c,grid,dp[r][c]);
+   dfs(dp,m,n,r-1,c,grid,dp[r][c]);
+   dfs(dp,m,n,r,c+1,grid,dp[r][c]);
+   dfs(dp,m,n,r,c-1,grid,dp[r][c]);
+} 
+
+int swimInWater(int** grid, int gridSize, int* gridColSize){
+
+int m = gridSize;
+int n = *gridColSize;
+
+int** dp = calloc(m, sizeof(int*));
+for (int i=0; i<m; i++)
+ dp[i] = calloc(n,sizeof(n));
+
+for (int i=0; i<m; i++)
+ for (int j=0; j<n; j++)
+  dp[i][j] = 10000; 
+
+dfs(dp, m, n, 0, 0, grid, grid[0][0]);
+
+/*
+for (int i=0; i<m; i++)
+{
+ for (int j=0; j<n; j++)
+ {
+     fprintf(stdout,"%d ",dp[i][j]);
+ }
+ fprintf(stdout,"\n"); 
+}
+*/
+
+return dp[m-1][n-1];
+}
