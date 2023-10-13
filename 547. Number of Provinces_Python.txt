@@ -1,0 +1,35 @@
+class DSU:
+    def __init__(self,N):
+      self.par = list(range(N))
+      self.rank = [1]*N
+
+    def find(self, p):
+      if self.par[p] != p:
+       return self.find(self.par[p])
+      return p 
+
+    def union(self, n1, n2):
+      p1, p2 = self.find(n1), self.find(n2)
+      if p1 == p2:
+        return
+      if self.rank[p1] > self.rank[p2]:
+        self.par[p2] = p1
+        self.rank[p1] += self.rank[p2]
+      else: 
+        self.par[p1] = p2
+        self.rank[p2] += self.rank[p1]        
+
+class Solution(object):
+    def findCircleNum(self, isConnected):
+        """
+        :type isConnected: List[List[int]]
+        :rtype: int
+        """
+        n = len(isConnected)
+        #print(n)
+        UF = DSU(n)
+        for r in range(n):
+         for c in range(r,n):
+           if (isConnected[r][c]):
+             UF.union(r,c)
+        return len(set([UF.find(i) for i in range(n)]))
