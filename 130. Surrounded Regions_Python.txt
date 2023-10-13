@@ -1,0 +1,29 @@
+class Solution(object):
+    def solve(self, board):
+        """
+        :type board: List[List[str]]
+        :rtype: None Do not return anything, modify board in-place instead.
+        """
+        def dfs(r, c, mark):
+            if r < 0 or r > m-1 or c < 0 or c > n-1 or board[r][c] != 'O': 
+                return
+            board[r][c] = mark
+            direc = [[-1,0],[1,0],[0,-1],[0,1]]
+            for d in direc:
+              dfs(r+d[0], c+d[1], mark) 
+
+        m , n = len(board), len(board[0])
+        print(m,n)
+        for r in list(range(m)):
+          for c in list(range(n)):
+              if board[r][c] == 'O' and (r == 0 or r == m-1 or c == 0 or c == n-1):
+                  dfs(r,c,'T')
+        #print(board)          
+        for r in list(range(m)):
+          for c in list(range(n)):
+              if board[r][c] == 'O':
+                  board[r][c] = 'X'              
+        for r in list(range(m)):
+          for c in list(range(n)):
+              if board[r][c] == 'T':
+                  board[r][c] = 'O'                                
