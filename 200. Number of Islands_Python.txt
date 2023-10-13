@@ -1,0 +1,24 @@
+class Solution(object):
+    def numIslands(self, grid):
+        """
+        :type grid: List[List[str]]
+        :rtype: int
+        """
+        def dfs(r, c, mark):
+            if r < 0 or r > m-1 or c < 0 or c > n-1 or grid[r][c] != '1': 
+                return
+            grid[r][c] = mark
+            direc = [[-1,0],[1,0],[0,-1],[0,1]]
+            for d in direc:
+              dfs(r+d[0], c+d[1], mark) 
+
+        m , n = len(grid), len(grid[0])
+        #print(m,n)
+        re = 0
+        for r in list(range(m)):
+          for c in list(range(n)):
+              if grid[r][c] == '1':
+                  dfs(r,c,0)
+                  re += 1
+
+        return re       
