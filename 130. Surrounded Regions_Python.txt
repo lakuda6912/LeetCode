@@ -13,7 +13,7 @@ class Solution(object):
               dfs(r+d[0], c+d[1], mark) 
 
         m , n = len(board), len(board[0])
-        print(m,n)
+        #print(m,n)
         for r in list(range(m)):
           for c in list(range(n)):
               if board[r][c] == 'O' and (r == 0 or r == m-1 or c == 0 or c == n-1):
