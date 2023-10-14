@@ -1,0 +1,64 @@
+class DSU:
+    def __init__(self,N):
+      self.par = list(range(N))
+      self.rank = [1]*N
+
+    def find(self, p):
+      if self.par[p] != p:
+       return self.find(self.par[p])
+      return p 
+
+    def union(self, n1, n2):
+      p1, p2 = self.find(n1), self.find(n2)
+      if p1 == p2:
+        return False
+      if self.rank[p1] > self.rank[p2]:
+        self.par[p2] = p1
+        self.rank[p1] += self.rank[p2]
+      else: 
+        self.par[p1] = p2
+        self.rank[p2] += self.rank[p1]  
+      return True
+
+     
+class Solution(object):
+    def findRedundantDirectedConnection(self, edges):
+        """
+        :type edges: List[List[int]]
+        :rtype: List[int]
+        """
+        def detectCycle(area):
+          UF = DSU(n)
+          for i in area:
+             if UF.union(edges[i][0]-1,edges[i][1]-1) == False:
+              return True
+          return False
+
+        n = len(edges)
+        cycles = set()
+        for i in list(range(n)):
+          area = set(range(n))
+          area.remove(i)
+          if detectCycle(area) == False:
+           cycles.add(i)
+        print(cycles)
+
+        indegree = [0]*n
+        for i in list(range(n)):
+          indegree[edges[i][1]-1] += 1
+        print(indegree)
+
+        re = []
+        for i in cycles:
+          if indegree[edges[i][1]-1] > 1:
+            re.append(i)
+        print('re: ',re) 
+
+        if re != []:
+         return edges[max(re)]
+        else:
+         return edges[max(cycles)]
+
+
+
+          
