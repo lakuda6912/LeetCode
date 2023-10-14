@@ -1,0 +1,35 @@
+class DSU:
+    def __init__(self,N):
+      self.par = list(range(N))
+      self.rank = [1]*N
+
+    def find(self, p):
+      if self.par[p] != p:
+       return self.find(self.par[p])
+      return p 
+
+    def union(self, n1, n2):
+      p1, p2 = self.find(n1), self.find(n2)
+      if p1 == p2:
+        return False
+      if self.rank[p1] > self.rank[p2]:
+        self.par[p2] = p1
+        self.rank[p1] += self.rank[p2]
+      else: 
+        self.par[p1] = p2
+        self.rank[p2] += self.rank[p1]        
+      return True  
+
+class Solution(object):
+    def minSwapsCouples(self, row):
+        """
+        :type row: List[int]
+        :rtype: int
+        """
+        n = len(row) / 2
+        UF = DSU(n)
+        re = 0
+        for i in list(range(n)):
+          if UF.union(row[i*2]/2,row[i*2+1]/2) == True:
+            re += 1
+        return re
