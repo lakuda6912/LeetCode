@@ -1,0 +1,52 @@
+class Solution(object):
+    def largestIsland(self, grid):
+        """
+        :type grid: List[List[int]]
+        :rtype: int
+        """
+        def dfs(r, c, color):
+            if r < 0 or r > n-1 or c < 0 or c > n-1 or grid[r][c] != 1: 
+                return 0
+            grid[r][c] = color
+            return 1 + dfs(r-1,c,color) + dfs(r+1,c,color) + dfs(r,c+1,color) + dfs(r,c-1,color)
+
+        def get(r, c):
+            if r < 0 or r > n-1 or c < 0 or c > n-1:
+                return 0
+            else:
+                return grid[r][c]
+ 
+        n = len(grid)
+
+        sizes = []
+        sizes.append(0) # for 0
+        sizes.append(0) # for 1
+        color = 1
+        for r in list(range(n)):
+            for c in list(range(n)):
+                if (grid[r][c] == 1):
+                   color += 1
+                   sizes.append(dfs(r,c,color))
+        #print(grid)
+        #print(sizes)
+
+        maxArea = 0
+        for r in list(range(n)):
+            for c in list(range(n)):
+                if (grid[r][c] == 0):
+                    direc = [(1,0), (-1,0), (0,1), (0,-1)]
+                    g = set()
+                    for d in direc:
+                        g.add(get(r+d[0],c+d[1]))
+                    #print(g)
+
+                    area = 1
+                    for d in g:
+                        area += sizes[d]
+
+                    maxArea = max(maxArea, area)    
+
+
+        return maxArea if maxArea != 0 else n*n
+
+        
