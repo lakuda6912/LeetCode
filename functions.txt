@@ -1,0 +1,4 @@
+for r, c in itertools.combinations(clean, 2):
+
+return min(initial, key=lambda i: [(malware[UF.find(i)] == 1) * -area[UF.find(i)], i])
+        
