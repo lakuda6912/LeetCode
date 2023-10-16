@@ -21,22 +21,26 @@ class DSU:
       return True  
 
 class Solution(object):
-    def minMalwareSpread(self, graph, initial):
+    def possibleBipartition(self, n, dislikes):
         """
-        :type graph: List[List[int]]
-        :type initial: List[int]
-        :rtype: int
+        :type n: int
+        :type dislikes: List[List[int]]
+        :rtype: bool
         """
-        n = len(graph)
-        UF = DSU(n)
+        UF = DSU(n+1)
 
-        for r, c in itertools.combinations(list(range(n)), 2):
-         if graph[r][c]: UF.union(r,c)
+        graph = defaultdict(list)
+        #print(dislikes)
+        for i, j in dislikes:
+            graph[i].append(j)
+            graph[j].append(i)
+        #print(graph)
 
-        area = collections.Counter(UF.find(i) for i in range(n))
-        malware = collections.Counter(UF.find(i) for i in initial)
-        #print(area)
-        #print(malware)
-        return min(initial, key=lambda i: [(malware[UF.find(i)] == 1) * -area[UF.find(i)], i])
-        
+        for i, j in graph.items():
+          for k in j:
+            if UF.find(i) == UF.find(k):
+              return False
+            UF.union(j[0],k)
+
+        return True
 
