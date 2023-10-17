@@ -1,0 +1,50 @@
+class DSU:
+    def __init__(self,N):
+      self.par = list(range(N))
+      self.rank = [1]*N
+
+    def find(self, p):
+      if self.par[p] != p:
+       return self.find(self.par[p])
+      return p 
+
+    def union(self, n1, n2):
+      p1, p2 = self.find(n1), self.find(n2)
+      if p1 == p2:
+        return False
+      if self.rank[p1] > self.rank[p2]:
+        self.par[p2] = p1
+        self.rank[p1] += self.rank[p2]
+      else: 
+        self.par[p1] = p2
+        self.rank[p2] += self.rank[p1]        
+      return True  
+
+class Solution(object):
+    def removeStones(self, stones):
+        """
+        :type stones: List[List[int]]
+        :rtype: int
+        """
+
+        def get(r, c):
+          for i in list(range(n)):
+              if r == stones[i][0] and c == stones[i][1]:
+                  return i
+          return -1
+
+        n = len(stones)
+        UF = DSU(n)
+
+        for i, j in itertools.combinations(list(range(n)), 2):
+            if stones[i][0] == stones[j][0] or stones[i][1] == stones[j][1]:
+                UF.union(get(stones[i][0],stones[i][1]),get(stones[j][0],stones[j][1]))
+        #for i in list(range(n)):
+        #    for j in list(range(n)):
+        #print(UF.par)
+        #print(UF.rank)
+
+        a = collections.Counter(UF.find(i) for i in list(range(n)))
+        #print(a)
+
+        return n-len(a) if n > 1 else 0
