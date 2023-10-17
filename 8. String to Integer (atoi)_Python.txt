@@ -1,0 +1,25 @@
+class Solution(object):
+    def myAtoi(self, s):
+        """
+        :type s: str
+        :rtype: int
+        """
+        digits = "0123456789"
+
+        s = s.lstrip()
+        sign = 1
+        if s and (s[0] == '-' or s[0] == '+'):
+            if s[0] == '-':
+                sign = -1
+            s = s[1:]    
+
+        re = 0
+        for char in s:
+            if char in digits:
+                re = re * 10 + int(char)
+            else:
+                break
+        re *= sign        
+
+        return min(max(re, -2**31), 2**31-1)
+        
