@@ -7,26 +7,21 @@ class Solution(object):
         """
         
         def dfs(i, j):
-            #print(i,j)
-            if i >= len(s) and j >= len(p):
-                return True
-            if j >= len(p):
-                return False
+            if j == len(p):
+                return i == len(s)
 
             if dp[i][j] == True:
               return False    
             dp[i][j] = True  
 
-            #print(i,j)
             match = i < len(s) and (s[i] == p[j] or p[j] == '.')
             if j+1 < len(p) and p[j+1] == '*':
-              return dfs(i,j+2) or (match and dfs(i+1,j))
+                return dfs(i, j+2) or (match and dfs(i+1,j))
 
-            if match:
+            if i < len(s) and (s[i] == p[j] or p[j] == '.'):
               return dfs(i+1,j+1)
             
             return False  
 
-        m, n = len(s), len(p)
-        dp = [[False] * (n+1) for _ in range(m+1)]
+        dp = [[False] * (len(p)+1) for _ in range(len(s)+1)]
         return dfs(0, 0)      
