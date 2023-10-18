@@ -1,0 +1,17 @@
+class Solution(object):
+    def generateParenthesis(self, n):
+        """
+        :type n: int
+        :rtype: List[str]
+        """
+        re = []
+        def dfs(l, r, s):
+            if len(s) == 2*n:
+                re.append(s)
+                return
+            if l < n:
+                dfs(l+1, r, s+'(')
+            if r < l:
+                dfs(l, r+1, s+')')
+        dfs(0, 0, '')
+        return re           
