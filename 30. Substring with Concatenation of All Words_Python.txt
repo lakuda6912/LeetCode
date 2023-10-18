@@ -1,0 +1,25 @@
+class Solution(object):
+    def findSubstring(self, s, words):
+        """
+        :type s: str
+        :type words: List[str]
+        :rtype: List[int]
+        """
+        wslen, wlen = len(words), len(words[0])
+        words, re = Counter(words), []
+        print(words)
+
+        for i in range(0, len(s)-(wslen*wlen)+1):
+            hmap = words.copy()
+            #print(hmap.values())
+            #print(any(hmap.values()))
+            for j in range(i, i+wslen*wlen+1, wlen):
+                if not hmap[s[j:j+wlen]]:
+                    break
+                hmap[s[j:j+wlen]] -= 1
+                if not any(hmap.values()):
+                    re.append(i)    
+        return re            
+
+
+        
