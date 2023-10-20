@@ -1,0 +1,25 @@
+class Solution(object):
+    def restoreIpAddresses(self, s):
+        """
+        :type s: str
+        :rtype: List[str]
+        """
+        re = []
+        def dfs(s, index, path):
+            #print(s, index, path)
+            if index > 4:
+                #print('early')
+                return
+            if index == 4 and not s:
+                #print('OK')
+                re.append(path[:-1])
+                #print(re)
+                return 
+
+            for i in range(1,len(s)+1):
+                if s[:i] == '0' or s[0] != '0' and 0 < int(s[:i]) < 256:
+                  dfs(s[i:], index+1, path+s[:i]+".")
+        dfs(s, 0, "")
+        return re       
+
+        
