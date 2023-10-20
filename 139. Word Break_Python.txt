@@ -1,0 +1,18 @@
+class Solution(object):
+    def wordBreak(self, s, wordDict):
+        """
+        :type s: str
+        :type wordDict: List[str]
+        :rtype: bool
+        """
+        dp = [False] * len(s) + [True] * 20
+
+        for i in range(len(s), -1, -1):
+            for j in range(len(wordDict)):
+              if s[i:i+len(wordDict[j])] in wordDict:
+                dp[i] = dp[i + len(wordDict[j])]
+                #print(i,s[i:i+len(wordDict[j])])
+                #print(dp)
+              if dp[i]:
+                break    
+        return dp[0]        
