@@ -1,0 +1,31 @@
+class Solution(object):
+    def minCut(self, s):
+        """
+        :type s: str
+        :rtype: int
+        """
+        def dfs(i):
+            if i == len(s):
+                return 0
+
+            if dp[i] != 2001:
+                return dp[i]
+
+            temp = ''
+            cut = 0
+            mini = 2001
+            for j in range(i,len(s)):
+                temp += s[j]
+                if temp == temp[-1::-1]:
+                    cut = 1 + dfs(j+1)
+                mini = min(mini, cut)    
+            dp[i] = min(dp[i], mini)
+
+            return mini        
+
+        #s = 'aabbaa'
+        #print(dfs(0,0), dfs(1,0), dfs(2,0))        
+
+        dp = [2001] * (len(s)+1)
+        dfs(0)
+        return dp[0]-1
