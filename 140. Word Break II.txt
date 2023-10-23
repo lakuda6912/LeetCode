@@ -1,0 +1,22 @@
+class Solution(object):
+    def wordBreak(self, s, wordDict):
+        """
+        :type s: str
+        :type wordDict: List[str]
+        :rtype: List[str]
+        """
+        def dfs(ind, buf):
+            if ind == len(s):
+                re.append(buf[:-1])
+                print(re)
+                return
+
+            for i in range(ind, len(s)):
+                if s[ind:i+1] in wordDict:
+                    dfs(i+1, buf+s[ind:i+1]+" ")
+            return        
+        
+
+        re = []
+        dfs(0,"")
+        return re
