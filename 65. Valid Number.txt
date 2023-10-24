@@ -1,0 +1,27 @@
+class Solution(object):
+    def isNumber(self, s):
+        """
+        :type s: str
+        :rtype: bool
+        """
+        num, exp, sign, dot = False, False, False, False
+        digit = 0
+        for c in s:
+            #print(c,num, exp, sign, dot)
+            if c >= '0' and c <= '9': num = True 
+                #digit += int(c)*10
+            elif c == 'e' or c == 'E':
+                if exp or not num: return False
+                #else: num, exp, sign, dot = True, True, False, False
+                else: num, exp, sign, dot  = False, True, False, False
+                #else: num, exp, sign  = True, True, False
+                #else: exp, sign  = True, False
+            elif c == '+' or c == '-':
+                if sign or num or dot: return False
+                else: sign = True
+            elif c == '.':
+                if dot or exp: return False
+                else: dot = True
+            else: return False
+        return num                
+        
