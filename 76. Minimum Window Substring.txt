@@ -1,0 +1,27 @@
+class Solution(object):
+    def minWindow(self, s, t):
+        """
+        :type s: str
+        :type t: str
+        :rtype: str
+        """
+        need, missing = collections.Counter(t), len(t)
+ 
+        left, finalLeft, finalRight = 0, 0, 0
+        for right, char in enumerate(s, 1):
+            missing -= need[char] > 0
+            need[char] -= 1
+            if not missing:
+                while left < right and need[s[left]] < 0: 
+                    need[s[left]] += 1
+                    left += 1
+                if not finalRight or right - left <= finalRight - finalLeft:
+                    finalLeft, finalRight = left, right
+
+        #print(missing)
+        #if len(s) >= len(t):
+        return s[finalLeft:finalRight]
+        #else:   
+        #    if missing:
+        #        return ""
+ 
