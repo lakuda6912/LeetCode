@@ -1,0 +1,18 @@
+class Solution(object):
+    def jump(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: int
+        """
+        l, r, res = 0, 0, 0
+        while r < len(nums)-1:
+            farthest = 0
+            for i in range(l,r+1):
+                if i+nums[i] > farthest:
+                    farthest = i+nums[i]
+            l, r = r+1, farthest
+            print(l, r, farthest)
+            res += 1
+        return res    
+
+        
