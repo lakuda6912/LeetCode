@@ -1,0 +1,30 @@
+class Solution(object):
+    def isMatch(self, s, p):
+        """
+        :type s: str
+        :type p: str
+        :rtype: bool
+        """
+        m, n = len(s), len(p)
+        dp = [[False] * (n+1) for _ in range(m+1)]
+
+        if m == 0 or n == 0:
+            if m == n:
+                return True
+            elif n == 0:
+                return False    
+        #print(m,n)
+        for i in reversed(range(n)):
+            if p[i] != '*':
+                break
+            dp[m][i] = True
+
+        dp[m][n] = True
+ 
+        for i in reversed(range(m)):
+            for j in reversed(range(n)):
+                 if s[i] == p[j] or p[j] == '?':
+                    dp[i][j] = dp[i+1][j+1]
+                 elif p[j] == '*':
+                    dp[i][j] = dp[i+1][j] or dp[i][j+1]
+        return dp[0][0]
