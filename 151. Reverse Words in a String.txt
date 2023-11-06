@@ -1,0 +1,17 @@
+class Solution(object):
+    def reverseWords(self, s):
+        """
+        :type s: str
+        :rtype: str
+        """
+        #print(s)
+        #print(s.split(' '))
+
+        x = s.split(' ')
+        r = ''
+        for i in x[::-1]:
+            if i != '':
+              r = r + ' ' + i
+
+        return r.strip()
+        
