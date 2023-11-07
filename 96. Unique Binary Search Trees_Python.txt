@@ -1,0 +1,22 @@
+class Solution(object):
+    def numTrees(self, n):
+        """
+        :type n: int
+        :rtype: int
+        """
+        dp = [-1] * n
+        def dfs(left, right):
+            if left > right:
+                return 1
+            #return sum(dfs(left, root-1) * dfs(root+1, right) for root in range(left, right+1))
+            s = 0
+            for root in range(left, right+1):
+                if dp[root-left] == -1:
+                    dp[root-left] = dfs(left, root-1)
+                if dp[right-root] == -1:
+                    dp[right-root] = dfs(root+1, right)
+                s += (dp[root-left] * dp[right-root])
+            return s    
+                
+        return dfs(1, n)        
+        
