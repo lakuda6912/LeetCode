@@ -1,0 +1,29 @@
+class Solution(object):
+    def maxProfit(self, prices):
+        """
+        :type prices: List[int]
+        :rtype: int
+        """
+        n = len(prices)
+        
+        left = [0] * n
+        right = [0] * n
+
+        m1 = prices[0]
+        m2 = 0
+        for i in range(n):
+            m1 = min(m1, prices[i])
+            m2 = max(m2, prices[i]-m1)
+            left[i] = max(left[i], m2)
+
+        m1 = prices[n-1]
+        m2 = 0 
+        for i in range(n-1,-1,-1):
+            m1 = max(m1, prices[i])
+            m2 = max(m2, m1-prices[i])
+            right[i] = max(right[i], m2)
+
+        #print(left)
+        #print(right)
+
+        return max([left[i] + right[i] for i in range(n)])
