@@ -1,0 +1,16 @@
+class Solution(object):
+    def maxProfit(self, prices):
+        """
+        :type prices: List[int]
+        :rtype: int
+        """
+        buy, sold, re = 0, 1, 0
+        while sold < len(prices):
+            if prices[sold] > prices[buy]:
+                re = max(re, prices[sold]-prices[buy])
+                sold += 1
+            else:
+                buy = sold
+                sold = buy + 1
+        return re    
+        
