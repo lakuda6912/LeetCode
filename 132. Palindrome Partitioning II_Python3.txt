@@ -1,0 +1,18 @@
+class Solution:
+    def minCut(self, s: str) -> int:
+        def solve(i):
+            if i == n:
+                return 0
+            if dp[i] != -1:
+                return dp[i]
+            mini=maxsize
+            for j in range(i, n):
+                if s[i:j+1] == s[i:j+1][::-1]:
+                    cuts = 1 + solve(j+1)
+                    mini = min(mini, cuts)
+            dp[i] = mini
+            return dp[i]
+        n = len(s)
+        dp = [-1] * n
+        return solve(0)-1
+        
