@@ -1,0 +1,25 @@
+class Solution:
+    def insert(self, intervals: List[List[int]], newInterval: List[int]) -> List[List[int]]:
+
+        tempBuf = intervals[:]
+        mergedInterval = newInterval
+
+        for interval in intervals:
+            #print('interval: ',interval)
+            #print('mergedInterval: ', mergedInterval)
+
+            if mergedInterval[0] <= interval[1] and mergedInterval[1] >= interval[0]:
+                mergedInterval[0] = min(mergedInterval[0], interval[0])
+                mergedInterval[1] = max(mergedInterval[1], interval[1])
+                tempBuf.remove(interval)
+            else:
+                if mergedInterval not in tempBuf:
+                    tempBuf.append(mergedInterval)
+
+            #print('sorted:', sorted(tempBuf))
+ 
+        return sorted(tempBuf) if tempBuf != [] else [newInterval]
+
+        
+
+        
