@@ -1,0 +1,17 @@
+class Solution:
+    def findMinArrowShots(self, points: List[List[int]]) -> int:
+
+        #points = [[1,16],[2,8],[1,6],[7,12]]
+        #print(points)
+        #print(sorted(points))
+        #print(points,lambda x:x[1])
+        #print(sorted(points,key=lambda x:x[1]))
+        points = sorted(points, key = lambda x:x[1])
+        c = 0
+        end = float('-inf')
+        for i in points:
+            if i[0] > end:
+                c += 1
+                end = i[1]
+
+        return c
