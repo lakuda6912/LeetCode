@@ -1,0 +1,26 @@
+class Solution:
+    def calculate(self, s: str) -> int:
+
+        #print(set(s))
+        #s = "-1-(2+3)"
+        sign, out, num = 1, 0, 0
+        stack = [sign]
+        #ans = 0
+        for c in s:
+            if c not in {'+', '-', '(', ')', ' '}:
+                num = num * 10 + (int)(c)
+            elif c in {'+', '-'}:
+                out += sign * num
+                sign = (1 if c == '+' else -1)
+                num = 0
+            elif c == '(':
+                stack.append(out)
+                stack.append(sign)
+                sign, out, num = 1, 0, 0
+            elif c == ')':
+                out += sign * num
+                out *= stack.pop()
+                out += stack.pop()
+                num = 0
+
+        return out + sign * num
