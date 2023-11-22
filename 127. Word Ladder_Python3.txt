@@ -1,0 +1,24 @@
+class Solution:
+    #@lru_cache(None)
+    #@cache
+    def ladderLength(self, beginWord: str, endWord: str, wordList: List[str]) -> int:
+
+        wordList = set(wordList)
+        q = deque([[beginWord, 1]])
+        #print(string.ascii_lowercase)
+        
+        while q:
+            word, length = q.popleft()
+
+            if word == endWord:
+                return length
+
+            for i in range(len(beginWord)):
+                for c in string.ascii_lowercase:
+                    r = word[:i]+c+word[i+1:]
+                    if r in wordList and r != word:
+                        wordList.remove(r)
+                        q.append([r, length+1])
+
+        return 0
+        
