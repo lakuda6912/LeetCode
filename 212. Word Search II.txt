@@ -36,4 +36,4 @@ class Solution:
         for i in range(m):
             for j in range(n):
                 dfs(i, j, root, "")
-        return res        
+        return list(res)
