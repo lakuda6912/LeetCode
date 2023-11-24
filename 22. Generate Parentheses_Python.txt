@@ -1,17 +1,14 @@
-class Solution(object):
-    def generateParenthesis(self, n):
-        """
-        :type n: int
-        :rtype: List[str]
-        """
-        re = []
-        def dfs(l, r, s):
-            if len(s) == 2*n:
-                re.append(s)
+class Solution:
+    def generateParenthesis(self, n: int) -> List[str]:
+        def dfs(comb, l, r):
+            if l == r == n:
+                ans.append(comb)
+                comb = []
                 return
             if l < n:
-                dfs(l+1, r, s+'(')
+                dfs(comb+'(',l+1,r)
             if r < l:
-                dfs(l, r+1, s+')')
-        dfs(0, 0, '')
-        return re           
+                dfs(comb+')',l,r+1)    
+        ans = []        
+        dfs('',0,0)
+        return ans        
