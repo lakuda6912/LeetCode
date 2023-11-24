@@ -1,0 +1,23 @@
+class Solution:
+    def exist(self, board: List[List[str]], word: str) -> bool:
+        def dfs(r,c,w):
+            if not w:
+                return True
+
+            if r < 0 or c < 0 or r > m-1 or c > n-1 or (r,c) in visit:
+                return False
+
+            if board[r][c] == w[0]:
+                visit.add((r,c))
+                if dfs(r-1,c,w[1:]) or dfs(r+1,c,w[1:]) or dfs(r,c-1,w[1:]) or dfs(r,c+1,w[1:]):
+                    return True
+                visit.remove((r,c))
+            return False
+
+        m, n = len(board), len(board[0])
+        visit = set()
+        for i in range(m):
+            for j in range(n):
+                if dfs(i, j, list(word)):
+                    return True
+        return False
