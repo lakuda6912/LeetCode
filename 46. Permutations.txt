@@ -1,0 +1,15 @@
+class Solution:
+    def permute(self, nums: List[int]) -> List[List[int]]:
+        def dfs(comb, d):
+            if len(comb) == len(nums):
+                ans.append(comb)
+                comb = []
+                return
+
+            for i in range(len(d)):
+                dfs(comb+[d[i]], d[:i]+d[i+1:])
+
+        ans = []
+        dfs([],nums)
+        return ans
+
