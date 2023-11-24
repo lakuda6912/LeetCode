@@ -2,18 +2,16 @@ class Solution:
     def combine(self, n: int, k: int) -> List[List[int]]:
         def dfs(comb, d):
             if len(comb) == k:
-                res.append(list(comb))
+                res.append(comb)
+                comb = []
                 return
 
             if not d:
                 return
 
             for i in range(len(d)):
-                comb.add(d[i])
-                dfs(comb, d[i+1:])
-                comb.remove(d[i])
+                dfs(comb+[d[i]], d[i+1:])
 
         res = []
-        comb = set()
-        dfs(comb, list(range(1,n+1)))
+        dfs([], list(range(1,n+1)))
         return res
