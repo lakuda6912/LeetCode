@@ -1,0 +1,8 @@
+class Solution:
+    def searchRange(self, nums: List[int], target: int) -> List[int]:
+        count = Counter(nums)
+        print(count)
+        #if target in nums:
+        #  print(nums.index(target))
+        #  print(count[target])
+        return [nums.index(target), nums.index(target)+count[target]-1] if target in nums else [-1, -1]
