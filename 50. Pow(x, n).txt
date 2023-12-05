@@ -1,0 +1,13 @@
+class Solution:
+    def dfs(self, x, n):
+        if n == 0:
+            return 1
+        if n % 2 == 0:
+            return float(self.dfs(x*x, n//2))
+        else:
+            return float(x*self.dfs(x*x,(n-1)//2))
+
+    def myPow(self, x: float, n: int) -> float:
+        #ans = self.dfs(x,n) if n > 0 else self.dfs(x,-n)
+        #return ans if n > 0 else float(1/ans)
+        return self.dfs(x,n) if n > 0 else float(1/self.dfs(x,-n))
