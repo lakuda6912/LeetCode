@@ -1,0 +1,26 @@
+class Solution:
+    def rob(self, nums: List[int]) -> int:
+        #@cache
+        def dfs(i, a):
+            #print(i)
+            if i == 0:
+                return a[i]
+            if i < 0:
+                return 0
+            if visit[i] == 0:
+                visit[i] = 1
+            else:
+                return tempVal[i]
+
+            pick = a[i] + dfs(i-2, a)
+            noPick = 0 + dfs(i-1, a) 
+            tempVal[i] = max(pick, noPick)
+            return tempVal[i]
+
+        visit = [0] * len(nums)
+        tempVal = [-1] * len(nums)
+        return dfs(len(nums)-1, nums)
+
+
+                    
+        
