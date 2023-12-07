@@ -5,9 +5,9 @@ class Solution:
                 return True
             if ind > len(s):
                 return False    
-            if visit[ind] == 1:
+            if ind in visit:
                 return dp[ind]
-            visit[ind] = 1
+            visit.add(ind)    
 
             dp[ind] = False    
             for w in wordDict:
@@ -17,5 +17,5 @@ class Solution:
             return dp[ind]
   
         dp = [False] * (len(s)+20)
-        visit = [0] * (len(s)+20)
+        visit = set()
         return dfs(0)            
