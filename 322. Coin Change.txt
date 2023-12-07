@@ -1,0 +1,27 @@
+class Solution:
+    def coinChange(self, coins: List[int], amount: int) -> int:
+        #ans = []
+        def dfs(a):
+            if a == amount:
+                return 0
+            if a > amount:
+                return amount+1
+            if dp[a] != -1:
+                return dp[a]
+
+            ans = amount + 1
+            for i in coins:
+                ans = min(ans, 1+dfs(a+i))
+            dp[a] = ans
+            return ans
+
+        if not amount:
+            return 0
+
+        dp = [-1] * (amount+len(coins))
+        dfs(0)
+        #print(dp)
+        return dp[0] if dp[0] <= amount else -1
+
+
+        
