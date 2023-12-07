@@ -1,0 +1,21 @@
+class Solution:
+    def wordBreak(self, s: str, wordDict: List[str]) -> bool:
+        def dfs(ind):
+            if ind == len(s):
+                return True
+            if ind > len(s):
+                return False    
+            if visit[ind] == 1:
+                return dp[ind]
+            visit[ind] = 1
+
+            dp[ind] = False    
+            for w in wordDict:
+                if w in s[ind:ind+len(w)]:
+                    dp[ind+len(w)] = dfs(ind+len(w))
+                    dp[ind] = dp[ind] or dp[ind+len(w)]
+            return dp[ind]
+  
+        dp = [False] * (len(s)+20)
+        visit = [0] * (len(s)+20)
+        return dfs(0)            
