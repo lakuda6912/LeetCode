@@ -1,0 +1,19 @@
+class Solution:
+    def lengthOfLIS(self, nums: List[int]) -> int:
+        def dfs(ind):
+            if dp[ind] != -1:
+                return dp[ind]
+            ans = 1
+            for i in range(ind+1,len(nums)):
+                if nums[i] > nums[ind]:
+                    ans = max(ans, 1+dfs(i))
+            dp[ind] = ans        
+            return dp[ind]
+
+        #print('ans=',dfs(2))
+        dp = [-1] * len(nums)
+        maxLen = 0
+        for i in range(len(nums)):
+            maxLen = max(maxLen, dfs(i))
+
+        return maxLen
