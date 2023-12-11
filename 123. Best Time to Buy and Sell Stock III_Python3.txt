@@ -1,0 +1,26 @@
+class Solution(object):
+    def maxProfit(self, prices):
+        """
+        :type prices: List[int]
+        :rtype: int
+        """
+        minPrice, maxProfit = float('inf'),  0
+        left = [0] * len(prices)
+        for i in range(len(prices)):
+            minPrice = min(minPrice, prices[i])
+            maxProfit = max(maxProfit, prices[i]-minPrice)
+            left[i] = maxProfit
+
+        maxPrice, maxProfit = -1, 0
+        right = [0] * len(prices)
+        for i in range(len(prices)-1,-1,-1):
+            maxPrice = max(maxPrice, prices[i])
+            maxProfit = max(maxProfit, maxPrice-prices[i])
+            right[i] = maxProfit
+
+        #print(left)
+        #print(right)
+        #for i in left + right:
+        #    print(i)
+        #print(all())
+        return max([left[i]+right[i] for i in range(len(prices))])
