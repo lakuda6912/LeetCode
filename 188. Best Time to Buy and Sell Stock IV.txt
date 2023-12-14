@@ -1,0 +1,35 @@
+class Solution(object):
+    def maxProfit(self, k, prices):
+        """
+        :type k: int
+        :type prices: List[int]
+        :rtype: int
+        """
+        #prices = [6,1,3,2,4,7]
+        #prices = [48,12,60,93,97,42,25,64,17,56,85,93,9,48,52,42,58,85,81,84,69,36,1,54,23,15,72,15,11,94]
+        #k = 3
+        n = len(prices)        
+        def dfs(ind, holdStock, cnt):
+            #print(i,profit,cnt,minPrice)
+
+            if ind == n or cnt == k:
+                return 0
+
+            if dp[ind][holdStock][cnt] != -1:
+                return dp[ind][holdStock][cnt]   
+
+            dp[ind][holdStock][cnt] = 0
+            if not holdStock:
+                buy = -prices[ind] + dfs(ind+1, 1, cnt)
+                noBuy = 0 + dfs(ind+1, 0, cnt)
+                dp[ind][holdStock][cnt] = max(buy, noBuy)
+            else:
+                sell = prices[ind] + dfs(ind+1,0,cnt+1)
+                noSell = 0 + dfs(ind+1, 1, cnt)
+                dp[ind][holdStock][cnt] = max(sell, noSell)
+            return dp[ind][holdStock][cnt]    
+
+        dp = [[[-1]*(k+1) for _ in range(2)] for _ in range(n+1)]
+        return dfs(0,0,0)
+
+        
