@@ -1,0 +1,19 @@
+class Solution:
+    def minTotalDistance(self, grid: List[List[int]]) -> int:
+        m, n = len(grid), len(grid[0])
+        tempX,tempY = [],[]
+        for i in range(m):
+            for j in range(n):
+                if grid[i][j]:
+                    tempX.append(i)
+                    tempY.append(j)
+        tempX = sorted(tempX)
+        tempY = sorted(tempY)
+        midX = tempX[len(tempX)//2]
+        midY = tempY[len(tempY)//2]
+        print(tempX,midX)
+        print(tempY,midY)
+        sumX = sum([abs(X-midX) for X in tempX])
+        sumY = sum([abs(Y-midY) for Y in tempY])
+        return sumX + sumY
+
