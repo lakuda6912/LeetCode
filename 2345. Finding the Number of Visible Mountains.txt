@@ -1,0 +1,16 @@
+class Solution:
+    def visibleMountains(self, peaks: List[List[int]]) -> int:
+        print(peaks)
+        stack =[-inf]
+        maxPos = 0 
+        for x, y in sorted(peaks):
+            pre, pos = x-y, x+y
+            while stack[-1] >= pre: 
+                stack.pop()
+            if pos > maxPos: 
+                maxPos = pos
+                stack.append(pre)
+        #print(stack)        
+        return len(stack) - 1        
+
+ 
