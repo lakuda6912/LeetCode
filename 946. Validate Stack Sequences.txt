@@ -1,0 +1,12 @@
+class Solution:
+    def validateStackSequences(self, pushed: List[int], popped: List[int]) -> bool:
+        stack = deque([])
+        j = 0
+        for i in range(len(pushed)):
+            stack.appendleft(pushed[i])
+            while stack and stack[0] == popped[j]:
+                stack.popleft()
+                j += 1
+        return not stack     
+
+        
