@@ -1,0 +1,14 @@
+class Solution:
+    def subArrayRanges(self, nums: List[int]) -> int:
+        res = 0
+        for i in range(len(nums)):
+            maxVal, minVal = nums[i], nums[i]
+            for j in range(i,len(nums)):
+                maxVal = max(maxVal, nums[j])
+                minVal = min(minVal, nums[j])
+                res += maxVal - minVal
+            #print(i,)    
+            
+        return res       
+
+        
