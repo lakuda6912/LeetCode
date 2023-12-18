@@ -1,0 +1,26 @@
+class Solution:
+    def isThereAPath(self, grid: List[List[int]]) -> bool:
+        m, n = len(grid), len(grid[0])
+        @cache
+        def dfs(i,j,cntOne,cntZero):
+
+            #print(i,j,cntOne,cntZero) 
+            if i == m-1 and j == n-1:
+                cntOne += grid[i][j]
+                cntZero += ((grid[i][j]+1)%2)
+                #dp[i][j] = (cntOne == cntZero)
+                return (cntOne == cntZero)
+            #if i == m-1 or j == n-1:
+            #    return    
+            #if dp[i][j] != -1:
+            #    return dp[i][j]
+
+            res = False
+            if i+1 < m:
+                res = res or dfs(i+1,j,cntOne+grid[i][j],cntZero+((grid[i][j]+1)%2))
+            if j+1 < n:
+                res = res or dfs(i,j+1,cntOne+grid[i][j],cntZero+((grid[i][j]+1)%2))
+            return res
+
+        #dp = [[-1]*(n+1) for _ in range(m+1)]    
+        return dfs(0,0,0,0)    
