@@ -1,0 +1,21 @@
+class Solution:
+    def removeKdigits(self, num: str, k: int) -> str:
+        ans = []
+        def getNum(s):
+            num = 0
+            for d in s:
+                num = num*10 + int(d)
+            return num
+
+        def dfs(s,cnt):
+            nonlocal ans
+            if cnt == k:
+                ans.append(getNum(s))
+                #print(ans)
+                return
+            for i in range(len(s)):
+                if i+1 < len(s) and s[i+1] <= s[i]:
+                   dfs(s[0:i]+s[i+1:],cnt+1)
+              
+        dfs(num,0)  
+        return str(min(ans)) if ans else "0"
