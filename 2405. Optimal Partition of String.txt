@@ -1,0 +1,22 @@
+class Solution:
+    def partitionString(self, s: str) -> int:
+        ans = []
+        use = set()
+        temp = ''
+        for c in s:
+            if c not in use:
+                use.add(c)
+                temp = temp + c
+            else:
+                ans.append(temp)
+                #print(ans)
+                use = set()
+                use.add(c)
+                temp = '' + c
+        ans.append(temp)
+        #print(ans)
+
+        return len(ans)    
+                
+
+ 
