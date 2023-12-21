@@ -1,0 +1,14 @@
+class Solution:
+    def minimumTime(self, jobs: List[int], workers: List[int]) -> int:
+        jobs = sorted(jobs)
+        workers = sorted(workers)
+        
+        ans = 0
+        for j, w in zip(jobs, workers):
+            ans = max(ans, ceil(j/w))
+            #print(j,w,ans)
+        #print(jobs)    
+        #print(workers)
+        #print(ans)
+        return ans
+
