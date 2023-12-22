@@ -1,0 +1,35 @@
+class Solution:
+    def minCost(self, nums: List[int], costs: List[int]) -> int:
+        n = len(nums)
+        minstack = []  
+        nge = [n] * n  
+        
+        maxstack = [] 
+        nse = [n] * n
+        
+        for i in range(0, len(nums)):
+            while minstack and nums[i] >= nums[minstack[-1]]:
+                top = minstack.pop()
+                nge[top] = i
+            minstack.append(i)
+            #print(minstack)
+            
+        for i in range(0, len(nums)):
+            while maxstack and nums[i] < nums[maxstack[-1]]:
+                top = maxstack.pop()
+                nse[top] = i
+            maxstack.append(i)
+        #print(nge, nse)
+        
+        inf = float("inf")
+        dp = [inf for i in range(n)]
+        dp[0] = 0
+        for i in range(n):
+            if nge[i] < n:
+                dp[nge[i]] = min(dp[nge[i]], dp[i] + costs[nge[i]])
+            if nse[i] < n:
+                dp[nse[i]] = min(dp[nse[i]], dp[i] + costs[nse[i]])
+        #print(dp)
+        return dp[-1]
+
+
