@@ -1,0 +1,28 @@
+class Solution:
+    def minCost(self, nums: List[int], costs: List[int]) -> int:
+        def getCost(i,j):
+            if nums[i+1:j]:
+                if nums[i] <= nums[j] and max(nums[i+1:j]) < nums[i]:
+                   return costs[j]
+                elif nums[i] > nums[j] and min(nums[i+1:j]) >= nums[i]:
+                   return costs[j]
+                else:
+                   return -1
+            return costs[j] 
+        @cache
+        def dfs(ind,cost):
+            if ind == len(nums)-1:
+                #dp[ind] = cost
+                return cost
+
+            if dp[ind] != -1:
+                return dp[ind]    
+
+            dp[ind] = float('inf')
+            for j in range(ind+1,len(nums)):
+                if getCost(ind,j) != -1:
+                    dp[ind] = min(dp[ind], cost + dfs(j,getCost(ind,j)))
+            return dp[ind]
+
+        dp = [-1] * len(nums)
+        return dfs(0,0)
