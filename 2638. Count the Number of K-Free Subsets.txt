@@ -1,11 +1,13 @@
 class Solution:
     def countTheNumOfKFreeSubsets(self, nums: List[int], k: int) -> int:
+        #nums = [3, 6, 8]
+        #k = 2
         def f(buf, val, k):
             for c in buf:
                 if abs(c-val) == k:
                     return True
             return False
-
+        #print(f([1, 4], 3, 2))
         ans = []
         def dfs(i, buf):
             #print(i,buf,len(nums))
@@ -15,14 +17,36 @@ class Solution:
                 #print('ans = ',ans)
                 return 
 
+            #if not buf:
+            #    buf = [nums[i]]
+                #ans.append([i])
+                #return
+            #if not buf:
+            #    dfs(i+1, buf + [nums[i]])
+            #res = []
+            #for j in range(i+1, len(nums)):
+                #if not buf:
+                #    dfs(i+1, buf + )
+                #if not f(buf, nums[j], k):
+                #    dfs(j, buf + [nums[j]])
+            #    res = res + [dfs(j, buf + [nums[i]])]
+            #return res
+            #if not f(buf, nums[i], k):
+            #    dfs(i+1, buf + [nums[i]])
+            #else:
+            #    dfs(i+1, buf)    
             for j in range(i+1, len(nums)+1):
+                #if j == i: continue
+                #buf.append(nums[i])
                 if not f(buf, nums[i], k):
                    dfs(j, buf + [nums[i]])
-
+                #buf.remove(nums[i])
+        
+        #print(dfs(0,[]))
+        #print(dfs(1,[]))
+        #print(dfs(2,[]))
+        #for a in ans: 
         for i in range(len(nums)):
-           dfs(0,[])
+            dfs(i,[])
 
         return len(ans) + 1
-
-
-        
