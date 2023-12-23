@@ -1,0 +1,28 @@
+class Solution:
+    def countTheNumOfKFreeSubsets(self, nums: List[int], k: int) -> int:
+        def f(buf, val, k):
+            for c in buf:
+                if abs(c-val) == k:
+                    return True
+            return False
+
+        ans = []
+        def dfs(i, buf):
+            #print(i,buf,len(nums))
+            nonlocal ans
+            if i == len(nums):
+                ans.append(buf)
+                #print('ans = ',ans)
+                return 
+
+            for j in range(i+1, len(nums)+1):
+                if not f(buf, nums[i], k):
+                   dfs(j, buf + [nums[i]])
+
+        for i in range(len(nums)):
+           dfs(0,[])
+
+        return len(ans) + 1
+
+
+        
