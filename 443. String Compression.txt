@@ -1,0 +1,33 @@
+class Solution:
+    def compress(self, chars: List[str]) -> int:
+        n = len(chars)
+        if n == 0: return 0
+
+        tChars = chars + [' ']
+        #tCharsCnt = 0
+        pt = tChars[0]
+        ptCnt = 0
+
+        def f(data, p, n):
+            data.append(p)
+            if n > 1:
+                s = str(n)
+                for i in range(len(s)): data.append(s[i])
+
+        while tChars[0] != ' ':
+            if pt != tChars[0]:
+                f(tChars, pt, ptCnt)
+                pt = tChars[0]      
+                ptCnt = 1
+            else:
+               ptCnt += 1            
+            tChars = tChars[1:]
+            #tCharsCnt += 1
+        f(tChars, pt, ptCnt)  
+        
+        temp = ''.join(tChars).strip()
+        #print(temp)
+        for i in range(len(temp)): chars[i] = temp[i]
+
+        return len(temp)        
+
