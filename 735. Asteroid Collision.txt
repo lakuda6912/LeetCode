@@ -1,0 +1,31 @@
+class Solution:
+    def asteroidCollision(self, asteroids: List[int]) -> List[int]:
+
+        def f(pre,pos):
+            if pre > 0 and pos < 0:
+                return True
+            return False    
+
+        ans = []
+        for a in asteroids:
+            if not ans or not f(ans[-1],a):
+                ans.append(a)
+            else:
+                if ans:
+                    d = 0
+                    while ans and f(ans[-1],a):
+                        if ans[-1]+a == 0:
+                            d = 1
+                            ans.pop()
+                            break
+                        elif ans[-1]+a < 0:
+                            ans.pop()
+                        else:
+                            d = 1
+                            break    
+
+                    if d == 0:
+                        ans.append(a)
+
+        #print(ans)
+        return ans
