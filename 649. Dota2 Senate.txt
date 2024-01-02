@@ -1,0 +1,19 @@
+class Solution:
+    def predictPartyVictory(self, senate: str) -> str:
+        rbuf, dbuf = deque(), deque()
+        print(senate)
+        for ind, char in enumerate(senate):
+            print(ind,char)
+            rbuf.append(ind) if char == 'R' else dbuf.append(ind)
+        while rbuf and dbuf:
+            if rbuf[0] < dbuf[0]:
+                dbuf.popleft()
+                rbuf.append(rbuf.popleft() + len(senate))    
+            else:    
+                rbuf.popleft()
+                dbuf.append(dbuf.popleft() + len(senate))
+        return 'Radiant' if rbuf else 'Dire'    
+
+
+        return "Dire"
+        
