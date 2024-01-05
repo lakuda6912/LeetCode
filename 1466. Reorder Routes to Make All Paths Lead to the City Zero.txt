@@ -1,0 +1,22 @@
+class Solution:
+    def minReorder(self, n: int, connections: List[List[int]]) -> int:
+        graph = defaultdict(list)
+        edges = set()
+        for u, v in connections:
+            edges.add((u,v))
+            graph[u].append(v)
+            graph[v].append(u)
+
+        visited = {0}
+        res = 0
+        def dfs(c):
+            nonlocal visited, res
+            for nei in graph[c]:
+                if nei in visited:
+                    continue
+                if (nei,c) not in edges:
+                    res += 1
+                visited.add(nei)
+                dfs(nei)
+        dfs(0)                 
+        return res        
