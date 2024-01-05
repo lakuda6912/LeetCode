@@ -1,0 +1,25 @@
+class Solution:
+    def canVisitAllRooms(self, rooms: List[List[int]]) -> bool:
+        def dfs(i, buf):
+            nonlocal ans
+
+            if i not in buf: buf += [i]
+
+            if len(buf) == n:
+                ans.append(buf)
+                print('ans = ',ans)
+                return
+            
+            for r in rooms[i]:
+                if r not in buf:
+                    dfs(r, buf)
+
+        n = len(rooms)
+        ans = []        
+        dfs(0, [0])
+        return True if ans and (max(len(a) for a in ans)) == n else False
+
+
+
+
+        
