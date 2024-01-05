@@ -1,0 +1,22 @@
+class Solution:
+    def orangesRotting(self, grid: List[List[int]]) -> int:
+        m, n = len(grid), len(grid[0])
+        flesh, rot = set(), deque()
+        for i in range(m):
+            for j in range(n):
+                if grid[i][j] == 1:
+                    flesh.add((i,j))
+                elif grid[i][j] == 2:
+                    rot.append((i,j)) 
+        res = 0            
+        while flesh and rot:
+            for _ in range(len(rot)):
+                i, j = rot.popleft()
+                for c in ((i-1,j), (i+1,j), (i,j-1), (i,j+1)):
+                    if c in flesh:
+                        flesh.remove(c)
+                        rot.append(c)
+            res += 1
+        return -1 if flesh else res            
+
+        
