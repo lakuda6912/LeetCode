@@ -1,0 +1,18 @@
+class Solution:
+    def combinationSum3(self, k: int, n: int) -> List[List[int]]:
+        ans = []
+        def dfs(num, buf):
+            nonlocal ans
+            if num == k and sum(buf) == n:
+                if sorted(buf) not in ans:
+                   ans.append(buf)
+                return
+
+            if num < k and sum(buf) < n:
+                for i in range(1,10):
+                    if i not in buf:
+                        dfs(num+1, buf + [i])
+        dfs(0,[])                
+        return ans      
+
+

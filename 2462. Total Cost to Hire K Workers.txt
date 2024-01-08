@@ -1,0 +1,23 @@
+class Solution:
+    def totalCost(self, costs: List[int], k: int, candidates: int) -> int:
+        middle = deque()
+        left, right = [float('inf')], [float('inf')]
+
+        for i, cost in enumerate(costs):
+            if i < candidates:
+                heappush(left, cost)
+            elif i >= len(costs) - candidates:
+                heappush(right, cost)
+            else:
+                middle.append(cost)
+
+        res = 0
+        for _ in range(k):
+            if left[0] <= right[0]:
+                res += heappop(left)
+                middle and heappush(left, middle.popleft())
+            else:
+                res += heappop(right)
+                middle and heappush(right, middle.pop())                
+        return res        
+
