@@ -1,0 +1,15 @@
+class Solution:
+    def maxScore(self, nums1: List[int], nums2: List[int], k: int) -> int:
+        pairs = sorted([(n2, n1) for n1, n2 in zip(nums1,nums2)], reverse = True)
+        minHeap = []
+        res = 0
+        sum_n1 = 0
+        for n2, n1 in pairs:
+            sum_n1 += n1
+            heapq.heappush(minHeap, n1)
+            if len(minHeap) > k:
+                sum_n1 -= heapq.heappop(minHeap)
+            if len(minHeap) == k:
+                res = max(res, n2 * sum_n1)
+        return res        
+        
