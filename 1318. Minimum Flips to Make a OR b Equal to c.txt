@@ -1,0 +1,4 @@
+class Solution:
+    def minFlips(self, a: int, b: int, c: int) -> int:
+        #print(bin(c & ~a & ~b).count("1"))
+        return bin(c & ~a & ~b).count("1") + bin(~c & a).count("1") + bin(~c & b).count("1")
