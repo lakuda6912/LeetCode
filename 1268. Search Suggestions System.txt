@@ -1,0 +1,14 @@
+class Solution:
+    def suggestedProducts(self, products: List[str], searchWord: str) -> List[List[str]]:
+        products.sort()
+
+        ans = []
+        previous = products
+        for i in range(len(searchWord)):
+            temp = []
+            for p in previous:
+                if len(p) > i and p[i] == searchWord[i]:
+                    temp.append(p)
+            previous = temp
+            ans.append(temp[:3])
+        return ans        
