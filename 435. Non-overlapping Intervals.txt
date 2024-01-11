@@ -1,0 +1,11 @@
+class Solution:
+    def eraseOverlapIntervals(self, intervals: List[List[int]]) -> int:
+        ans = 0
+        arrow = -math.inf
+
+        for p in sorted(intervals, key = lambda x:x[1]):
+            if p[0] >= arrow:
+                arrow = p[1]
+            else:
+                ans += 1
+        return ans        
