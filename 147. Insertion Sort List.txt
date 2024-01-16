@@ -1,0 +1,51 @@
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, val=0, next=None):
+#         self.val = val
+#         self.next = next
+class Solution:
+    def insertionSortList(self, head: Optional[ListNode]) -> Optional[ListNode]:
+        if not head or not head.next: return head
+        mid = self.findMid(head)
+        left = head
+        right = mid.next
+        mid.next = None
+
+        left = self.insertionSortList(left)
+        right = self.insertionSortList(right)
+        res = self.merge(left, right)
+        return res
+
+    def findMid(self, head):
+        if not head or not head.next: return head
+        slow, fast = head, head
+        while fast.next and fast.next.next:
+            slow = slow.next
+            fast = fast.next.next
+        return slow
+
+    def merge(self, l1, l2):
+        if not l1: return l2
+        if not l2: return l1
+
+        dummy = ListNode()
+        curr = dummy
+
+        while l1 and l2:
+            if l1.val < l2.val:
+                curr.next = l1
+                curr = curr.next
+                l1 = l1.next
+            else:
+                curr.next = l2
+                curr = curr.next
+                l2 = l2.next
+            if l1:
+                curr.next = l1
+            if l2:
+                curr.next = l2
+        return dummy.next    
+
+
+
+                
