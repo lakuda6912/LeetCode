@@ -1,0 +1,13 @@
+class Solution:
+    def maxProduct(self, nums: List[int]) -> int:
+        minP, maxP, ans = nums[0], nums[0], nums[0]
+
+        for v in nums[1:]:
+            maxT = maxP * v
+            minT = minP * v
+            
+            maxP = max(maxT, minT, v)
+            minP = min(maxT, minT, v)
+
+            ans = max(ans, maxP)
+        return ans    
