@@ -1,0 +1,10 @@
+class Solution:
+    def lengthOfLongestSubstringTwoDistinct(self, s: str) -> int:
+        stack = []
+        res = 0
+        for i in s:
+            stack.append(i)
+            while len(set(stack)) > 2:
+                stack.pop(0)
+            res = max(res, len(stack))
+        return res

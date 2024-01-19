@@ -1,0 +1,18 @@
+class Solution:
+    def isOneEditDistance(self, s: str, t: str) -> bool:
+        m, n = len(s), len(t)
+        if abs(m-n) > 1: return False
+
+        mode, i, j, isEdited = m-n, 0, 0, 0
+        while i < m or j < n:
+            ss = s[i] if i < m else None
+            tt = t[j] if j < n else None
+            if ss == tt:
+                i, j = i+1, j+1
+            else:
+                if isEdited: return False
+                isEdited = True
+                if mode == 1: i += 1
+                elif mode == -1: j += 1
+                else: i, j = i+1, j+1
+        return isEdited        
