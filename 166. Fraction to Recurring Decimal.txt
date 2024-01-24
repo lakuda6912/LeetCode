@@ -1,0 +1,28 @@
+class Solution:
+    def fractionToDecimal(self, numerator: int, denominator: int) -> str:
+        if numerator == 0: return "0"
+        if denominator == 0: return ""
+
+        res = ""
+        if (numerator < 0) ^ (denominator < 0): res += "-"
+        numerator, denominator = abs(numerator), abs(denominator)
+
+        res += str(numerator // denominator)
+        remainder = numerator % denominator
+        if remainder == 0: return res
+        res += "."
+
+        remainder_dict = {}
+        while remainder != 0 and remainder not in remainder_dict:
+            remainder_dict[remainder] = len(res)
+            remainder *= 10
+            res += str(remainder // denominator)
+            remainder %= denominator
+
+        if remainder in remainder_dict:
+             res = res[:remainder_dict[remainder]] + "(" + res[remainder_dict[remainder]:] + ")"
+
+        return res     
+
+
+        

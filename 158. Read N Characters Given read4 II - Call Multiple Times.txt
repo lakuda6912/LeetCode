@@ -1,0 +1,28 @@
+# The read4 API is already defined for you.
+# def read4(buf4: List[str]) -> int:
+
+def stream():
+    x = ['']*4
+    while t := read4(x):
+        yield from x[:t]
+
+class Solution:
+    def __init__(self):
+        self.workspace = []
+
+    def read(self, buf: List[str], n: int) -> int:
+
+        while len(self.workspace) < n:
+            ram =  ['']*4
+            #print(self.workspace, ram)
+            read4(ram)
+            #print(self.workspace, ram)
+            self.workspace.extend(ram)
+            #print(self.workspace, ram)
+        for i in range(n):
+            popped = self.workspace.pop(0)
+            buf[i] = popped
+        return n     
+
+        return 0
+        
