@@ -1,0 +1,10 @@
+class Solution:
+    def reverseWords(self, s: List[str]) -> None:
+        """
+        Do not return anything, modify s in-place instead.
+        """
+        #print(s)
+        #print(''.join(s))
+        #print(''.join(s).split())
+        #print(' '.join(reversed(''.join(s).split())))
+        s[:] = ' '.join(reversed(''.join(s).split()))
