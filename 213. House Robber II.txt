@@ -1,0 +1,16 @@
+class Solution:
+    def rob(self, nums: List[int]) -> int:
+        def maxPrice(arr):
+            prev, prev2 = arr[0], 0
+            for i in range(1,len(arr)):
+                take = arr[i]
+                if i > 1: take += prev2
+                noTake = prev
+                curr = max(take, noTake)
+                prev2, prev = prev, curr
+            return prev
+
+        if len(nums) <= 1: return nums[0]
+        return max(maxPrice(nums[1:]), maxPrice(nums[:-1]))        
+
+        
